@@ -28,6 +28,7 @@ public class User {
     @NotEmpty(message = "Email cannot be empty")
     @Column(unique = true, nullable = false)
     private String email;
+
     @Column(length = 60)
     private String password;
     private String profilePicture;
