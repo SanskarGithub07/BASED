@@ -33,4 +33,5 @@ public class User {
     private String password;
     private String profilePicture;
     private String status;
+    private Boolean enabled = false;
 }
