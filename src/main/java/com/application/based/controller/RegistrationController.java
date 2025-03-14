@@ -7,7 +7,11 @@ import com.application.based.service.RegistrationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 public class RegistrationController {
@@ -31,18 +35,23 @@ public class RegistrationController {
         User user = registrationServiceImpl.registerUser(userModel);
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
 
-        return "Registration Successful.";
+        return "Registration Successful. Email sent for verification to registered email id.";
     }
 
     @GetMapping("/verifyRegistration")
-    public String verifyRegistration(@RequestParam("token") String token){
+    public ResponseEntity<Void> verifyRegistration(@RequestParam("token") String token) {
         String result = registrationServiceImpl.validateVerificationToken(token);
-        if(result.equalsIgnoreCase("valid")){
-            return "User Verified Successfully.";
+
+        String redirectUrl;
+        if (result.equalsIgnoreCase("valid")) {
+            redirectUrl = "http://localhost:5173/verify?status=success";
+        } else {
+            redirectUrl = "http://localhost:5173/verify?status=failure";
         }
 
-        return "Bad User";
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(redirectUrl)).build();
     }
+
 
 
 }
