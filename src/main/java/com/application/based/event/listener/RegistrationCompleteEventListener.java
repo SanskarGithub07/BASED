@@ -3,8 +3,8 @@ package com.application.based.event.listener;
 import com.application.based.entity.User;
 import com.application.based.event.RegistrationCompleteEvent;
 import com.application.based.model.EmailModel;
-import com.application.based.service.EmailServiceImpl;
-import com.application.based.service.RegistrationServiceImpl;
+import com.application.based.service.EmailService;
+import com.application.based.service.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -17,17 +17,17 @@ import java.util.UUID;
 public class RegistrationCompleteEventListener implements
         ApplicationListener<RegistrationCompleteEvent> {
     @Autowired
-    private RegistrationServiceImpl registrationServiceImpl;
+    private RegistrationService registrationService;
 
     @Autowired
-    private EmailServiceImpl emailServiceImpl;
+    private EmailService emailService;
 
     @Override
     public void onApplicationEvent(RegistrationCompleteEvent event){
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
 
-        registrationServiceImpl.saveVerificationTokenForUser(token, user);
+        registrationService.saveVerificationTokenForUser(token, user);
 
         String url = event.getApplicationUrl() + "/verifyRegistration?token=" + token;
 
@@ -37,7 +37,7 @@ public class RegistrationCompleteEventListener implements
                 .msgBody("Click the link to verify your account:, {" + url + "}")
                 .build();
 
-        emailServiceImpl.sendSimpleMail(emailModel);
+        emailService.sendSimpleMail(emailModel);
     }
 }
 
