@@ -29,7 +29,7 @@ public class RegistrationCompleteEventListener implements
 
         registrationService.saveVerificationTokenForUser(token, user);
 
-        String url = event.getApplicationUrl() + "/verifyRegistration?token=" + token;
+        String url = event.getApplicationUrl() + "/api/auth/verifyRegistration?token=" + token;
 
         EmailModel emailModel = EmailModel.builder()
                 .recipient(user.getEmail())

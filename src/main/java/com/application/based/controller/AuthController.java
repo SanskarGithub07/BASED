@@ -3,10 +3,9 @@ package com.application.based.controller;
 import com.application.based.entity.User;
 import com.application.based.entity.VerificationToken;
 import com.application.based.event.RegistrationCompleteEvent;
-import com.application.based.model.EmailModel;
-import com.application.based.model.PasswordModel;
-import com.application.based.model.UserModel;
+import com.application.based.model.*;
 import com.application.based.service.EmailService;
+import com.application.based.service.JwtService;
 import com.application.based.service.RegistrationService;
 import com.application.based.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -21,13 +26,23 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-public class RegistrationController {
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     private RegistrationService registrationService;
 
     @Autowired
     private ApplicationEventPublisher publisher;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private EmailService emailService;
@@ -39,16 +54,43 @@ public class RegistrationController {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
-    @PostMapping("/register/user")
-    public String registerUser(@RequestBody UserModel userModel, final HttpServletRequest request){
-        if(!userModel.getPassword().equals(userModel.getMatchingPassword())){
-            return "Please enter matching passwords. Registration aborted.";
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody RegisterModel registerModel, final HttpServletRequest request){
+        if(!registerModel.getPassword().equals(registerModel.getMatchingPassword())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please enter matching passwords. Registration aborted.");
         }
 
-        User user = registrationService.registerUser(userModel);
+        User user = registrationService.registerUser(registerModel);
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
 
-        return "Registration Successful. Email sent for verification to registered email id.";
+        return ResponseEntity.ok("Registration Successful. Email sent for verification to registered email id.");
+    }
+
+    @PostMapping("/login")
+    public JwtAuthResponseModel authenticateAndGetToken(@RequestBody LoginModel loginModel) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginModel.getUsernameOrEmail(), loginModel.getPassword())
+        );
+
+        System.out.println(authentication.toString());
+        if (authentication.isAuthenticated()) {
+            String token = jwtService.generateToken(loginModel.getUsernameOrEmail());
+            System.out.println(token);
+            JwtAuthResponseModel jwtAuthResponseModel = JwtAuthResponseModel
+                    .builder()
+                    .accessToken(token)
+                    .tokenType("Bearer")
+                    .build();
+            return jwtAuthResponseModel;
+        } else {
+            throw new UsernameNotFoundException("Invalid user request!");
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        SecurityContextHolder.clearContext(); // Clears authentication session
+        return ResponseEntity.ok("Logged out successfully");
     }
 
     @GetMapping("/verifyRegistration")
@@ -85,7 +127,7 @@ public class RegistrationController {
         emailService.sendSimpleMail(emailModel);
     }
 
-    @PostMapping("/user/resetPassword")
+    @PostMapping("/resetPassword")
     public String resetPassword(@RequestBody PasswordModel passwordModel, final HttpServletRequest request){
         String userEmail = passwordModel.getEmail();
         User user = userService.getUserByEmailId(userEmail);
@@ -99,7 +141,7 @@ public class RegistrationController {
         return url;
     }
 
-    @PostMapping("/user/savePassword")
+    @PostMapping("/savePassword")
     public String savePassword(@RequestParam("token") String token, @RequestBody PasswordModel passwordModel){
         String result = userService.validatePasswordResetToken(token);
         if(!result.equalsIgnoreCase("valid")){
@@ -129,7 +171,7 @@ public class RegistrationController {
         return url;
     }
 
-    @PostMapping("/user/changePassword")
+    @PostMapping("/changePassword")
     public String changePassword(@RequestBody PasswordModel passwordModel){
         User user = userService.getUserByEmailId(passwordModel.getEmail());
         if(!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())){
