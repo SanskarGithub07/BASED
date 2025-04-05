@@ -16,16 +16,19 @@ import lombok.NoArgsConstructor;
 public class Stock {
 
     @Id
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "books", referencedColumnName = "ISBN")
-    private Long ISBN;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stock_sequence")
+    @SequenceGenerator(name = "stock_sequence", sequenceName = "stock_sequence", allocationSize = 1)
+    private Long id;
 
-    @NotBlank(message = "Price cannot be blank, please add a price")
+    @OneToOne
+    @JoinColumn(name = "isbn", referencedColumnName = "isbn")
+    private Book book;  // Reference to Book entity
+
+    @NotBlank(message = "Price cannot be null, please add a price")
     @Column(nullable = false)
     private Integer price;
 
     @Column()
     private Integer quantity;
-
 
 }
