@@ -2,17 +2,12 @@ package com.application.based.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,10 +26,10 @@ public class Book {
     private Long isbn;
 
     @Column(length = 60, nullable = false)
-    private String author;
+    private String authorName;
 
     @Column(length = 60, nullable = false)
-    private String bookname;
+    private String bookName;
 
     private Double price;
 

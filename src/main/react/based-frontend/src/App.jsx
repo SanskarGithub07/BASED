@@ -5,6 +5,7 @@ import LoginForm from "./components/LoginForm";
 import CustomerDashboard from "./components/CustomerDashboard";
 import MainPage from "./components/MainPage";
 import Logout from "./components/Logout";
+import BookManagement from "./BookManagement";
 
 export default function App() {
   const token = localStorage.getItem("authToken");
@@ -16,7 +17,7 @@ export default function App() {
       <Route path="/verify" element={<VerifyUser />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/logout" element={<Logout />} />
-
+      <Route path = "/books" element= {<BookManagement/>}/>
       <Route
         path="/dashboard"
         element={token ? <CustomerDashboard /> : <Navigate to="/login" />}
