@@ -16,11 +16,11 @@ export default function App() {
       <Route path="/verify" element={<VerifyUser />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/logout" element={<Logout />} />
+
       <Route
         path="/dashboard"
         element={token ? <CustomerDashboard /> : <Navigate to="/login" />}
       />
-
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
