@@ -25,7 +25,8 @@ export default function App() {
       />
 {/*       <Route path = "/shadcnbutton" element = {<SampleButton/>}/> */}
 
-      <Route path="*" element={<Navigate to="/login" />} />
+{/* This leads to overriding the customer dashboard when logging in. */}
+      {/* <Route path="*" element={<Navigate to="/login" />} /> */}
     </Routes>
   );
 }
