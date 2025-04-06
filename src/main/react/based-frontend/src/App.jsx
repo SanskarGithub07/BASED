@@ -6,6 +6,7 @@ import CustomerDashboard from "./components/CustomerDashboard";
 import MainPage from "./components/MainPage";
 import Logout from "./components/Logout";
 import BookManagement from "./BookManagement";
+import SampleButton from "./SampleButton";
 
 export default function App() {
   const token = localStorage.getItem("authToken");
@@ -22,6 +23,8 @@ export default function App() {
         path="/dashboard"
         element={token ? <CustomerDashboard /> : <Navigate to="/login" />}
       />
+{/*       <Route path = "/shadcnbutton" element = {<SampleButton/>}/> */}
+
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
