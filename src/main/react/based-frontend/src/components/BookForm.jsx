@@ -1,110 +1,140 @@
 import { useState } from "react";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 
 export default function BookForm() {
-    const [book, setBook] = useState({
+  const [book, setBook] = useState({
+    isbn: "",
+    authorName: "",
+    bookName: "",
+    price: "",
+    quantity: "",
+    publicationYear: ""
+  });
+
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    setBook({ ...book, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post("http://localhost:8080/api/book/add", book);
+      setMessage("✅ Book added successfully!");
+      setBook({
         isbn: "",
         authorName: "",
         bookName: "",
         price: "",
         quantity: "",
         publicationYear: ""
-    });
-    const [message, setMessage] = useState("");
+      });
+    } catch (error) {
+      console.error(error);
+      setMessage("❌ Failed to add book. Please check your input.");
+    }
+  };
 
-    const handleChange = (e) => {
-        setBook({ ...book, [e.target.name]: e.target.value });
-    };
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+      <Card className="w-full max-w-xl">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl">Add Book</CardTitle>
+        </CardHeader>
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+        <CardContent>
+          {message && (
+            <p className="mb-4 text-center text-sm text-blue-700">{message}</p>
+          )}
 
-        try {
-            await axios.post("http://localhost:8080/api/book/add", book);
-            setMessage("✅ Book added successfully!");
-            setBook({
-                isbn: "",
-                authorName: "",
-                bookName: "",
-                price: "",
-                quantity: "",
-                publicationYear: ""
-            });
-        } catch (error) {
-            console.error(error);
-            setMessage("❌ Failed to add book. Please check your input.");
-        }
-    };
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="isbn">ISBN</Label>
+              <Input
+                autoComplete="off"
+                name="isbn"
+                type="number"
+                placeholder="ISBN"
+                value={book.isbn}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-    return (
-        <div className="max-w-xl mx-auto bg-white shadow-lg rounded-2xl p-6 my-8">
-            <h2 className="text-2xl font-semibold mb-4 text-center">Add Book</h2>
-            {message && <p className="mb-4 text-center text-sm text-blue-700">{message}</p>}
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                    autoComplete="off"
-                    name="isbn"
-                    type="number"
-                    placeholder="ISBN"
-                    value={book.isbn}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border rounded-lg"
-                />
-                <input
-                    autoComplete="off"
-                    name="authorName"
-                    type="text"
-                    placeholder="Author"
-                    value={book.authorName}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border rounded-lg"
-                />
-                <input
-                    autoComplete="off"
-                    name="bookName"
-                    type="text"
-                    placeholder="Book Name"
-                    value={book.bookName}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border rounded-lg"
-                />
-                <input
-                    autoComplete="off"
-                    name="price"
-                    type="number"
-                    step="0.01"
-                    placeholder="Price"
-                    value={book.price}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg"
-                />
-                <input
-                    autoComplete="off"
-                    name="quantity"
-                    type="number"
-                    placeholder="Quantity"
-                    value={book.quantity}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg"
-                />
-                <input
-                    autoComplete="off"
-                    name="publicationYear"
-                    type="date"
-                    value={book.publicationYear}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg"
-                />
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-                >
-                    Add Book
-                </button>
-            </form>
-        </div>
-    );
+            <div>
+              <Label htmlFor="authorName">Author Name</Label>
+              <Input
+                autoComplete="off"
+                name="authorName"
+                type="text"
+                placeholder="Author"
+                value={book.authorName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="bookName">Book Name</Label>
+              <Input
+                autoComplete="off"
+                name="bookName"
+                type="text"
+                placeholder="Book Name"
+                value={book.bookName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="price">Price</Label>
+              <Input
+                autoComplete="off"
+                name="price"
+                type="number"
+                step="0.01"
+                placeholder="Price"
+                value={book.price}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="quantity">Quantity</Label>
+              <Input
+                autoComplete="off"
+                name="quantity"
+                type="number"
+                placeholder="Quantity"
+                value={book.quantity}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="publicationYear">Publication Year</Label>
+              <Input
+                autoComplete="off"
+                name="publicationYear"
+                type="date"
+                value={book.publicationYear}
+                onChange={handleChange}
+              />
+            </div>
+
+            <Button type="submit" className="w-full">
+              Add Book
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }

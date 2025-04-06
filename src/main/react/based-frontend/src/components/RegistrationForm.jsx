@@ -1,5 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function RegistrationForm() {
     const [user, setUser] = useState({
@@ -36,62 +40,61 @@ export default function RegistrationForm() {
     };
 
     return (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 bg-white rounded-lg shadow-lg text-center">
-            <h2 className="mb-5 text-2xl font-semibold text-gray-800">Register</h2>
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+            <Card className="w-full max-w-md">
+                <CardHeader>
+                    <CardTitle className="text-center text-2xl">Register</CardTitle>
+                </CardHeader>
 
-            {message && (
-                <p className="mb-3 p-3 text-sm rounded bg-green-100 text-green-800 border border-green-300">
-                    {message}
-                </p>
-            )}
-            {error && (
-                <p className="mb-3 p-3 text-sm rounded bg-red-100 text-red-800 border border-red-300">
-                    {error}
-                </p>
-            )}
+                <CardContent>
+                    {message && (
+                        <Alert variant="success" className="mb-4">
+                            <AlertDescription>{message}</AlertDescription>
+                        </Alert>
+                    )}
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    autoComplete="off"
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    onChange={handleChange}
-                    required
-                    className="w-full p-3 mb-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <input
-                    autoComplete="off"
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    onChange={handleChange}
-                    required
-                    className="w-full p-3 mb-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleChange}
-                    required
-                    className="w-full p-3 mb-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <input
-                    type="password"
-                    name="matchingPassword"
-                    placeholder="Confirm Password"
-                    onChange={handleChange}
-                    required
-                    className="w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <button
-                    type="submit"
-                    className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                >
-                    Register
-                </button>
-            </form>
+                    {error && (
+                        <Alert variant="destructive" className="mb-4">
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <Input
+                            autoComplete="off"
+                            name="username"
+                            placeholder="Username"
+                            onChange={handleChange}
+                            required
+                        />
+                        <Input
+                            autoComplete="off"
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            onChange={handleChange}
+                            required
+                        />
+                        <Input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            onChange={handleChange}
+                            required
+                        />
+                        <Input
+                            type="password"
+                            name="matchingPassword"
+                            placeholder="Confirm Password"
+                            onChange={handleChange}
+                            required
+                        />
+                        <Button type="submit" className="w-full">
+                            Register
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     );
 }
