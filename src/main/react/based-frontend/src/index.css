@@ -127,3 +127,30 @@ body {
     }
 }
 
+/* for the floating animation in /exp-ui */
+/* @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  } */
+
+@keyframes floatRandom {
+0% {
+    transform: translate(0, 0) rotate(0deg);
+}
+50% {
+    transform: translate(var(--x, 20px), var(--y, 20px)) rotate(var(--r, 30deg));
+}
+100% {
+    transform: translate(0, 0) rotate(0deg);
+}
+}
+
+.float-random {
+animation: floatRandom var(--duration, 10s) ease-in-out infinite;
+}
+  
+  

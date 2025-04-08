@@ -2,16 +2,16 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
-  Card,
   CardHeader,
   CardTitle,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+
+import FloatingIconsBackground from "./xp-ui/FloatingiconsBackground";
+import GlassCard from "./xp-ui/GlassCard";
 
 export default function LoginPage() {
   const [user, setUser] = useState({ usernameOrEmail: "", password: "" });
@@ -46,50 +46,65 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <Card className="w-[400px]">
+    <div className="relative flex h-screen items-center justify-center overflow-hidden">
+      <FloatingIconsBackground />
+      
+      <GlassCard className="w-[400px] z-10">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Login</CardTitle>
         </CardHeader>
+
         <CardContent>
           {error && (
             <Alert variant="destructive" className="mb-4">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label>Username or Email</Label>
-              <Input
-                type="text"
-                name="usernameOrEmail"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <Label>Password</Label>
-              <Input
-                type="password"
-                name="password"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full">
+            <Input
+              type="text"
+              name="usernameOrEmail"
+              placeholder="Username"
+              onChange={handleChange}
+              required
+            />
+
+            <Input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={handleChange}
+              required
+            />
+
+            <Button
+              type="submit"
+              className="w-full bg-white/90 backdrop-blur-md border border-black/30 text-black uppercase tracking-wide hover:bg-purple-300 hover:text-black transition-all duration-200"
+            >
               Login
             </Button>
           </form>
+
+          <div className="flex gap-4 mt-4">
+            <Button
+              type="button"
+              onClick={() => navigate('/register')}
+              className="flex-1 bg-black/90 backdrop-blur-md border border-white/30 text-white uppercase tracking-wide hover:bg-purple-400/70 hover:text-black transition-all duration-200"
+            >
+              Register
+            </Button>
+
+            <Button
+              type="button"
+              onClick={() => navigate('/forgot-password')}
+              className="flex-1 bg-black/90 backdrop-blur-md border border-white/30 text-white uppercase tracking-wide hover:bg-purple-400/70 hover:text-black transition-all duration-200"
+            >
+              Forgot Password?
+            </Button>
+          </div>
         </CardContent>
-        <CardFooter className="justify-center">
-          <a
-            href="#"
-            className="text-sm text-blue-500 hover:underline transition"
-          >
-            Forgot Password?
-          </a>
-        </CardFooter>
-      </Card>
+      </GlassCard>
     </div>
   );
 }

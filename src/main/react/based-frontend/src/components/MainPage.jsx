@@ -1,76 +1,88 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { RocketIcon } from "lucide-react"
+
+// from experimental ui
+import FloatingIconsBackground from "./xp-ui/FloatingiconsBackground"
+import GlassCard from "./xp-ui/GlassCard"
 
 export default function MainPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navbar */}
-      <nav className="bg-black shadow sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold text-white">
-            MyApp
-          </Link>
+    <>
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white px-4 overflow-hidden">
+      
+      {/* Decorative background */}
+      <FloatingIconsBackground />
 
-          <NavigationMenu>
-            <NavigationMenuList className="flex gap-6">
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link
-                    to="/"
-                    className="text-gray-300 hover:text-white transition"
-                  >
-                    Home
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link
-                    to="/register"
-                    className="text-gray-300 hover:text-white transition"
-                  >
-                    Register
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link
-                    to="/login"
-                    className="text-gray-300 hover:text-white transition"
-                  >
-                    Login
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-80px)] px-4">
-        <div className="bg-white rounded-xl shadow-lg p-10 max-w-md w-full text-center border border-gray-300">
-          <h1 className="text-4xl font-bold text-black mb-8">
-            Welcome to Our Application
+      {/* Glass effect card */}
+      <GlassCard>
+        <div className="flex flex-col items-center gap-4">
+          <RocketIcon className="w-12 h-12 text-black/70" />
+          <h1 className="text-3xl text-center">
+            Welcome to <span className="text-black/70">the SE Project!</span>
           </h1>
-          <Link to="/register">
-            <button className="w-full py-3 bg-black text-white text-lg rounded-md hover:bg-gray-900 transition duration-300">
-              Register
-            </button>
-          </Link>
-          <Link to="/login" className="mt-4 block">
-            <button className="w-full py-3 border border-black text-black text-lg rounded-md hover:bg-gray-100 transition duration-300">
-              Login
-            </button>
-          </Link>
+          <p className="text-center text-muted-foreground">
+            A Bookshop and Inventory Management System.
+          </p>
+
+          <div className="flex flex-col gap-4 w-full mt-4">
+            <Link to="/register">
+              <Button className="w-full hover:scale-105 transition-transform duration-200">
+                Register
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button variant="outline" className="w-full hover:scale-105 transition-transform duration-200">
+                Login
+              </Button>
+            </Link>
+            <Link to="/">
+              <Button variant="ghost" className="w-full text-sm">
+                Home
+              </Button>
+            </Link>
+          </div>
         </div>
-      </div>
+      </GlassCard>
+
     </div>
-  );
+
+    <section id="about" className="py-20 px-4 flex justify-center items-center bg-black text-white">
+  <FloatingIconsBackground />
+
+  <div className="max-w-2xl w-full">
+    <Card className="backdrop-blur-md bg-white/5 border border-white/20 rounded-2xl p-10 space-y-4">
+      <h2 className="text-3xl font-bold text-white text-center">About This Project</h2>
+
+      <p className="text-muted-foreground text-lg leading-relaxed text-center">
+        Built using React, shadcn/ui, and TailwindCSS. 
+      </p>
+
+      <div className="flex justify-center">
+        <a 
+          href="https://github.com/your-username/your-repo-name"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-6 py-3 rounded-xl border border-white/20 bg-white/5 backdrop-blur text-white font-medium shadow-inner hover:bg-white/10 transition"
+        >
+          View on GitHub
+        </a>
+      </div>
+    </Card>
+  </div>
+</section>
+
+
+
+  </>
+
+
+  )
 }
