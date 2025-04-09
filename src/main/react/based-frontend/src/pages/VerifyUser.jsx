@@ -2,8 +2,8 @@ import { useSearchParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import FloatingIconsBackground from "./xp-ui/FloatingiconsBackground";
-import GlassCard from "./xp-ui/GlassCard";
+import FloatingIconsBackground from "../components/xp-ui/FloatingiconsBackground";
+import GlassCard from "../components/xp-ui/GlassCard";
 import { CheckCircle, XCircle } from "lucide-react";
 
 export default function VerifyUser() {

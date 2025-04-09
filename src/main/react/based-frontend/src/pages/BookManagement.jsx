@@ -1,6 +1,6 @@
-import BookForm from "./components/BookForm";
-import BookSearch from "./components/BookSearch";
-import FloatingIconsBackground from "./components/xp-ui/FloatingiconsBackground";
+import BookForm from "../components/BookForm";
+import BookSearch from "../components/BookSearch";
+import FloatingIconsBackground from "../components/xp-ui/FloatingiconsBackground";
 
 function BookManagement() {
     return (

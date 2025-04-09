@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import FloatingIconsBackground from "./xp-ui/FloatingiconsBackground"
-import GlassCard from "./xp-ui/GlassCard"
+import FloatingIconsBackground from "../components/xp-ui/FloatingiconsBackground"
+
+import GlassCard from "../components/xp-ui/GlassCard"
 export default function RegistrationForm() {
   const [user, setUser] = useState({
     username: "",
