@@ -2,10 +2,7 @@ package com.application.based.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -22,13 +19,13 @@ public class Book {
     @SequenceGenerator(name = "book_sequence", sequenceName = "book_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private Long isbn;
+    @Column(unique = true, nullable = false, length = 20)
+    private String isbn;
 
-    @Column(length = 60, nullable = false)
+    @Column(length = 255, nullable = false)
     private String authorName;
 
-    @Column(length = 60, nullable = false)
+    @Column(length = 255, nullable = false)
     private String bookName;
 
     private Double price;
@@ -38,6 +35,11 @@ public class Book {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate publicationYear;
 
+    private String availability;
 
+    private String publisher;
+
+    private String imageUrl;
+
+    private String genre;
 }
-

@@ -1,5 +1,6 @@
 import BookForm from "./components/BookForm";
 import BookSearch from "./components/BookSearch";
+import BookList from "./components/BookList";
 
 function BookManagement() {
     return (
@@ -7,6 +8,8 @@ function BookManagement() {
             <h1 className="text-3xl font-bold text-center mb-8">📚 Book Management</h1>
             <BookForm />
             <BookSearch />
+
+            <BookList />
         </div>
     );
 }
