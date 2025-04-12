@@ -7,6 +7,7 @@ import MainPage from "./components/MainPage";
 import Logout from "./components/Logout";
 import BookManagement from "./BookManagement";
 import SampleButton from "./SampleButton";
+import BookGrid from "./BookGrid";
 
 export default function App() {
   const token = localStorage.getItem("authToken");
@@ -19,11 +20,12 @@ export default function App() {
       <Route path="/login" element={<LoginForm />} />
       <Route path="/logout" element={<Logout />} />
       <Route path = "/books" element= {<BookManagement/>}/>
+      <Route path="/books/search" element={<BookGrid />}/>
       <Route
         path="/dashboard"
         element={token ? <CustomerDashboard /> : <Navigate to="/login" />}
       />
-{/*       <Route path = "/shadcnbutton" element = {<SampleButton/>}/> */}
+      {/* <Route path = "/shadcnbutton" element = {<SampleButton/>}/> */}
 
 {/* This leads to overriding the customer dashboard when logging in. */}
       {/* <Route path="*" element={<Navigate to="/login" />} /> */}

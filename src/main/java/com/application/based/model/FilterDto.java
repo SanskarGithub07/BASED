@@ -13,4 +13,9 @@ public class FilterDto {
     private String isbnNumber;
     private String authorName;
     private String bookName;
+    private Double minPrice;
+    private Double maxPrice;
+    private String availability;
+    private String publisherName;
+    private Integer publicationYear;
 }

@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -28,23 +30,8 @@ public class BookController {
     public List<Book> searchBooksByParams(
             @RequestParam(value = "author", required = false) String authorName,
             @RequestParam(value = "isbn", required = false) String isbnNumber,
-            @RequestParam(value = "name", required = false) String bookName){
+            @RequestParam(value = "name", required = false) String bookName) {
         return bookservice.searchBooks(authorName, isbnNumber, bookName);
-    }
-
-    @GetMapping("/search/range")
-    public List<Book> searchBooksByRange(
-            @RequestParam(value = "minPrice", required = false) double minPrice,
-            @RequestParam(value = "maxPrice", required = false) double maxPrice
-    ){
-        return bookservice.searchBooksByPriceRange(minPrice, maxPrice);
-    }
-
-    @GetMapping("/search/available")
-    public List<Book> searchBooksByAvailability(
-            @RequestParam(value = "availability", required = true) String availability
-    ){
-        return bookservice.searchBooksByAvailability(availability);
     }
 
     @GetMapping("/filtering&pagination&sorting")
@@ -52,19 +39,29 @@ public class BookController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "5") Integer size,
             @RequestParam(name = "sort", defaultValue = "[{\"field\":\"price\",\"direction\":\"desc\"}]") String sort,
-            @RequestParam(name = "author", required = false) String authorName,
-            @RequestParam(name = "isbn", required = false) String isbnNumber,
-            @RequestParam(name = "name", required = false) String bookName
+            @RequestParam(name = "author-name", required = false) String authorName,
+            @RequestParam(name = "isbn-number", required = false) String isbnNumber,
+            @RequestParam(name = "book-name", required = false) String bookName,
+            @RequestParam(name = "min-price", required = false) Double minPrice,
+            @RequestParam(name = "max-price", required = false) Double maxPrice,
+            @RequestParam(name = "availability", required = false) String availability,
+            @RequestParam(name = "publisher", required = false) String publisherName,
+            @RequestParam(name = "publication-year", required = false) Integer publicationYear
     ){
-        System.out.println(authorName);
+        String decodedSort = URLDecoder.decode(sort, StandardCharsets.UTF_8);
         Page<BookOutDto> bookDto = bookservice.findBooksWithFilteringPaginationAndSorting(
                 BookInDto.builder()
                         .authorName(authorName)
                         .isbnNumber(isbnNumber)
                         .bookName(bookName)
+                        .minPrice(minPrice)
+                        .maxPrice(maxPrice)
+                        .availability(availability)
+                        .publisherName(publisherName)
+                        .publicationYear(publicationYear)
                         .page(page)
                         .size(size)
-                        .sort(sort)
+                        .sort(decodedSort)
                         .build());
 
         return ResponseEntity.ok(bookDto);

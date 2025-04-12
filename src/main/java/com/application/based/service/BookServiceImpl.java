@@ -65,30 +65,16 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public List<Book> searchBooksByPriceRange(double minPrice, double maxPrice){
-        if(minPrice > maxPrice){
-            return List.of();
-        }
-
-        return bookRepository.findByPriceGreaterThanEqualAndPriceLessThanEqual(minPrice, maxPrice);
-    }
-
-    @Override
-    public List<Book> searchBooksByAvailability(String availability){
-        if(!availability.equalsIgnoreCase("IN_STOCK") && !availability.equalsIgnoreCase("OUT_OF_STOCK")){
-            return List.of();
-        }
-
-        String searchVal = availability.equalsIgnoreCase("IN_STOCK") ? "IN_STOCK" : "OUT_OF_STOCK";
-        return bookRepository.findByAvailability(searchVal);
-    }
-
-    @Override
     public Page<BookOutDto> findBooksWithFilteringPaginationAndSorting(BookInDto bookInDto) {
         FilterDto filterDto = FilterDto.builder()
                 .isbnNumber(bookInDto.getIsbnNumber())
                 .authorName(bookInDto.getAuthorName())
                 .bookName(bookInDto.getBookName())
+                .minPrice(bookInDto.getMinPrice())
+                .maxPrice(bookInDto.getMaxPrice())
+                .availability(bookInDto.getAvailability())
+                .publisherName(bookInDto.getPublisherName())
+                .publicationYear(bookInDto.getPublicationYear())
                 .build();
 
         List<SortDto>  sortDtos = jsonStringToSortDto(bookInDto.getSort());

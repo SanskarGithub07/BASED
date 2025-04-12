@@ -19,9 +19,5 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
 
     List<Book> findByBookNameContainingIgnoreCase(String bookName);
 
-    List<Book> findByPriceGreaterThanEqualAndPriceLessThanEqual(double minPrice, double maxPrice);
-
-    List<Book> findByAvailability(String searchValue);
-
     List<Book> findAll(Specification<Book> specification);
 }

@@ -16,4 +16,9 @@ public class BookInDto {
     private Integer page;
     private Integer size;
     private String sort;
+    private Double minPrice;
+    private Double maxPrice;
+    private String availability;
+    private String publisherName;
+    private Integer publicationYear;
 }

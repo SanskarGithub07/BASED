@@ -11,7 +11,5 @@ import java.util.List;
 public interface BookService {
     Book addBook(BookModel bookModel);
     List<Book> searchBooks(String authorName, String isbn, String bookName);
-    List<Book> searchBooksByPriceRange(double minPrice, double maxPrice);
-    List<Book> searchBooksByAvailability(String availability);
     Page<BookOutDto> findBooksWithFilteringPaginationAndSorting(BookInDto build);
 }
