@@ -20,9 +20,9 @@ public class Stock {
     @SequenceGenerator(name = "stock_sequence", sequenceName = "stock_sequence", allocationSize = 1)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "isbn", referencedColumnName = "isbn")
-    private Book book;  // Reference to Book entity
+//    @OneToOne
+//    @JoinColumn(name = "isbn", referencedColumnName = "isbn")
+//    private Book book;  // Reference to Book entity
 
     @NotBlank(message = "Price cannot be null, please add a price")
     @Column(nullable = false)

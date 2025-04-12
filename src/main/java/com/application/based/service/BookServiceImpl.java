@@ -1,12 +1,22 @@
 package com.application.based.service;
 
 import com.application.based.entity.Book;
-import com.application.based.model.BookModel;
+import com.application.based.model.*;
 import com.application.based.repository.BookRepository;
+import com.application.based.repository.specification.BookSpecification;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService{
@@ -23,17 +33,17 @@ public class BookServiceImpl implements BookService{
                                                 .publicationYear(bookModel.getPublicationYear())
                                                         .quantity(bookModel.getQuantity())
                                                                 .price(bookModel.getPrice())
-
+                                                                        .availability(bookModel.getAvailability())
                 .build();
         return bookRepository.save(book);
     }
 
     @Override
-    public List<Book> searchBooks(String authorName, Long isbnNumber, String bookName){
+    public List<Book> searchBooks(String authorName, String isbnNumber, String bookName){
         if(isbnNumber != null){
-            Book book = bookRepository.findByIsbn(isbnNumber);
-            if(book != null){
-                return List.of(book);
+            Optional<Book> book = bookRepository.findByIsbn(isbnNumber);
+            if(book.isPresent()){
+                return List.of(book.get());
             }
             else{
                 return List.of();
@@ -51,6 +61,65 @@ public class BookServiceImpl implements BookService{
         }
         else{
             return List.of();
+        }
+    }
+
+    @Override
+    public Page<BookOutDto> findBooksWithFilteringPaginationAndSorting(BookInDto bookInDto) {
+        FilterDto filterDto = FilterDto.builder()
+                .isbnNumber(bookInDto.getIsbnNumber())
+                .authorName(bookInDto.getAuthorName())
+                .bookName(bookInDto.getBookName())
+                .minPrice(bookInDto.getMinPrice())
+                .maxPrice(bookInDto.getMaxPrice())
+                .availability(bookInDto.getAvailability())
+                .publisherName(bookInDto.getPublisherName())
+                .publicationYear(bookInDto.getPublicationYear())
+                .build();
+
+        List<SortDto>  sortDtos = jsonStringToSortDto(bookInDto.getSort());
+        List<Sort.Order> orders = new ArrayList<>();
+
+        if(sortDtos != null){
+            for(SortDto sortDto : sortDtos){
+                Sort.Direction direction = Objects.equals(sortDto.getDirection(), "desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+                orders.add(new Sort.Order(direction, sortDto.getField()));
+            }
+        }
+
+        PageRequest pageRequest = PageRequest.of(
+                bookInDto.getPage(),
+                bookInDto.getSize(),
+                Sort.by(orders)
+        );
+
+        Specification<Book> specification = BookSpecification.getSpecification(filterDto);
+        Page<Book> books = bookRepository.findAll(specification, pageRequest);
+
+        return books.map(book -> BookOutDto.builder()
+                .id(book.getId())
+                .isbn(book.getIsbn())
+                .authorName(book.getAuthorName())
+                .bookName(book.getBookName())
+                .price(book.getPrice())
+                .quantity(book.getQuantity())
+                .publicationYear(book.getPublicationYear())
+                .availability(book.getAvailability())
+                .publisher(book.getPublisher())
+                .imageUrl(book.getImageUrl())
+                .genre(book.getGenre())
+                .build()
+        );
+    }
+
+    private List<SortDto> jsonStringToSortDto(String jsonString){
+        try{
+            ObjectMapper obj = new ObjectMapper();
+            return obj.readValue(jsonString, new TypeReference<>() {});
+        }
+        catch(Exception e){
+            System.out.println("Exception occurred: " + e);
+            return null;
         }
     }
 }

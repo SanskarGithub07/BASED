@@ -20,7 +20,7 @@ public class RoleInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        List<String> roles = Arrays.asList("ROLE_CUSTOMER", "ROLE_STAFF", "ROLE_EMPLOYEE");
+        List<String> roles = Arrays.asList("ROLE_CUSTOMER", "ROLE_ADMIN", "ROLE_EMPLOYEE");
         roles.forEach(roleName -> {
             roleRepository.findByName(roleName).orElseGet(() -> {
                 Role newRole = new Role();
