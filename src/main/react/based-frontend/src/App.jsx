@@ -1,13 +1,14 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import RegisterForm from "./components/RegistrationForm";
-import VerifyUser from "./components/VerifyUser";
-import LoginForm from "./components/LoginForm";
-import CustomerDashboard from "./components/CustomerDashboard";
-import MainPage from "./components/MainPage";
-import Logout from "./components/Logout";
-import BookManagement from "./BookManagement";
+import RegisterForm from "./pages/RegistrationForm";
+import VerifyUser from "./pages/VerifyUser";
+import LoginForm from "./pages/LoginForm";
+import CustomerDashboard from "./pages/CustomerDashboard";
+import MainPage from "./pages/MainPage";
+import Logout from "./pages/Logout";
+import BookManagement from "./pages/BookManagement";
 import SampleButton from "./SampleButton";
 import BookGrid from "./BookGrid";
+import BookManagementNew from "./pages/BookManagementNew"
 
 export default function App() {
   const token = localStorage.getItem("authToken");
@@ -21,6 +22,7 @@ export default function App() {
       <Route path="/logout" element={<Logout />} />
       <Route path = "/books" element= {<BookManagement/>}/>
       <Route path="/books/search" element={<BookGrid />}/>
+      <Route path="/booksnew" element={<BookManagementNew/>}/>
       <Route
         path="/dashboard"
         element={token ? <CustomerDashboard /> : <Navigate to="/login" />}

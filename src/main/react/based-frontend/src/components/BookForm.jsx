@@ -2,8 +2,14 @@ import { useState } from "react";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { motion } from "framer-motion";
+
+// from experimental ui
+import FloatingIconsBackground from "./xp-ui/FloatingiconsBackground";
+import GlassCard from "./xp-ui/GlassCard";
 
 export default function BookForm() {
   const [book, setBook] = useState({
@@ -12,10 +18,11 @@ export default function BookForm() {
     bookName: "",
     price: "",
     quantity: "",
-    publicationYear: ""
+    publicationYear: "",
   });
 
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setBook({ ...book, [e.target.name]: e.target.value });
@@ -23,118 +30,98 @@ export default function BookForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
     try {
       await axios.post("http://localhost:8080/api/book/add", book);
       setMessage("✅ Book added successfully!");
+
       setBook({
         isbn: "",
         authorName: "",
         bookName: "",
         price: "",
         quantity: "",
-        publicationYear: ""
+        publicationYear: "",
       });
     } catch (error) {
       console.error(error);
       setMessage("❌ Failed to add book. Please check your input.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
-      <Card className="w-full max-w-xl">
-        <CardHeader>
-          <CardTitle className="text-center text-2xl">Add Book</CardTitle>
-        </CardHeader>
+    <div className="relative min-h-screen flex justify-center items-center overflow-hidden bg-gray-100 px-4">
+      {/* <FloatingIconsBackground /> */}
 
-        <CardContent>
-          {message && (
-            <p className="mb-4 text-center text-sm text-blue-700">{message}</p>
-          )}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="relative z-10 w-full max-w-xl"
+      >
+        <GlassCard>
+          <CardHeader>
+            <CardTitle className="text-center text-2xl">Add Book</CardTitle>
+          </CardHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="isbn">ISBN</Label>
-              <Input
-                autoComplete="off"
-                name="isbn"
-                type="number"
-                placeholder="ISBN"
-                value={book.isbn}
-                onChange={handleChange}
-                required
-              />
+          <CardContent>
+            {message && (
+              <Alert
+                variant={message.includes("successfully") ? "success" : "destructive"}
+                className="mb-4"
+              >
+                <AlertDescription>{message}</AlertDescription>
+              </Alert>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {[
+                { name: "isbn", label: "ISBN", type: "number" },
+                { name: "authorName", label: "Author Name", type: "text" },
+                { name: "bookName", label: "Book Name", type: "text" },
+                { name: "price", label: "Price", type: "number", step: "0.01" },
+                { name: "quantity", label: "Quantity", type: "number" },
+                { name: "publicationYear", label: "Publication Year", type: "date" },
+              ].map((field) => (
+                <div key={field.name} className="space-y-1">
+                  <Label htmlFor={field.name}>{field.label}</Label>
+                  <Input
+                    {...field}
+                    autoComplete="off"
+                    value={book[field.name]}
+                    onChange={handleChange}
+                    required={field.name !== "price" && field.name !== "quantity"}
+                  />
+                </div>
+              ))}
+
+            <div className="flex gap-4 mt-4">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="flex-1 bg-black/90 backdrop-blur-md border border-white/30 text-white uppercase tracking-wide hover:bg-purple-400/70 hover:text-black transition-all duration-200"
+              >
+                {loading ? "Adding..." : "Add Book"}
+              </Button>
+
+              <Button
+                type="button"
+                variant="secondary"
+                className="flex-1 bg-black/90 backdrop-blur-md border border-white/30 text-white uppercase tracking-wide hover:bg-purple-400/70 hover:text-black transition-all duration-200"
+                onClick={() => window.location.href = '/'}  // Pure redirect without next/router
+              >
+                Go Home
+              </Button>
             </div>
 
-            <div>
-              <Label htmlFor="authorName">Author Name</Label>
-              <Input
-                autoComplete="off"
-                name="authorName"
-                type="text"
-                placeholder="Author"
-                value={book.authorName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="bookName">Book Name</Label>
-              <Input
-                autoComplete="off"
-                name="bookName"
-                type="text"
-                placeholder="Book Name"
-                value={book.bookName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="price">Price</Label>
-              <Input
-                autoComplete="off"
-                name="price"
-                type="number"
-                step="0.01"
-                placeholder="Price"
-                value={book.price}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="quantity">Quantity</Label>
-              <Input
-                autoComplete="off"
-                name="quantity"
-                type="number"
-                placeholder="Quantity"
-                value={book.quantity}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="publicationYear">Publication Year</Label>
-              <Input
-                autoComplete="off"
-                name="publicationYear"
-                type="date"
-                value={book.publicationYear}
-                onChange={handleChange}
-              />
-            </div>
-
-            <Button type="submit" className="w-full">
-              Add Book
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+            </form>
+          </CardContent>
+        </GlassCard>
+      </motion.div>
     </div>
   );
 }

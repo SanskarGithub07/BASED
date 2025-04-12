@@ -116,6 +116,26 @@ body {
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+        }
+    to {
+      height: var(--radix-accordion-content-height);
+        }
+    }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+        }
+    to {
+      height: 0;
+        }
+    }
 }
 
 @layer base {
@@ -127,3 +147,20 @@ body {
     }
 }
 
+@keyframes floatRandom {
+0% {
+    transform: translate(0, 0) rotate(0deg);
+}
+50% {
+    transform: translate(var(--x, 20px), var(--y, 20px)) rotate(var(--r, 30deg));
+}
+100% {
+    transform: translate(0, 0) rotate(0deg);
+}
+}
+
+.float-random {
+animation: floatRandom var(--duration, 10s) ease-in-out infinite;
+}
+
+  
