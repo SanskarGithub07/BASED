@@ -1,12 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import FloatingIconsBackground from "../components/xp-ui/FloatingiconsBackground"
+import FloatingIconsBackground from "../components/xp-ui/FloatingiconsBackground";
+import GlassCard from "../components/xp-ui/GlassCard";
 
-import GlassCard from "../components/xp-ui/GlassCard"
 export default function RegistrationForm() {
   const [user, setUser] = useState({
     username: "",
@@ -42,12 +42,12 @@ export default function RegistrationForm() {
   };
 
   return (
-    <div className="relative flex justify-center items-center min-h-screen bg-white/90 text-white overflow-hidden">
+    <div className="relative flex justify-center items-center min-h-screen overflow-hidden bg-white/90 dark:bg-black/90 text-black dark:text-white transition-colors duration-300">
       <FloatingIconsBackground />
 
-      <Card className="w-full max-w-md backdrop-blur-xl bg-black/90 border border-white/10 rounded-2xl p-8 shadow-lg">
+      <GlassCard className="w-full max-w-md backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg">
         <CardHeader>
-          <CardTitle className="text-center text-2xl text-white">Register</CardTitle>
+          <CardTitle className="text-center text-2xl">Register</CardTitle>
         </CardHeader>
 
         <CardContent>
@@ -63,64 +63,60 @@ export default function RegistrationForm() {
             </Alert>
           )}
 
-<form onSubmit={handleSubmit} className="space-y-4">
-  <Input
-    autoComplete="off"
-    name="username"
-    placeholder="Username"
-    onChange={handleChange}
-    required
-    className="bg-white/10 border border-white/10 text-white placeholder:text-white/50"
-  />
-  <Input
-    autoComplete="off"
-    type="email"
-    name="email"
-    placeholder="Email"
-    onChange={handleChange}
-    required
-    className="bg-white/10 border border-white/10 text-white placeholder:text-white/50"
-  />
-  <Input
-    type="password"
-    name="password"
-    placeholder="Password"
-    onChange={handleChange}
-    required
-    className="bg-white/10 border border-white/10 text-white placeholder:text-white/50"
-  />
-  <Input
-    type="password"
-    name="matchingPassword"
-    placeholder="Confirm Password"
-    onChange={handleChange}
-    required
-    className="bg-white/10 border border-white/10 text-white placeholder:text-white/50"
-  />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              autoComplete="off"
+              name="username"
+              placeholder="Username"
+              onChange={handleChange}
+              required
+              className="bg-white/10 dark:bg-black/20 border border-white/20 text-black dark:text-white placeholder:text-black/50 dark:placeholder:text-white/50"
+            />
+            <Input
+              autoComplete="off"
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleChange}
+              required
+              className="bg-white/10 dark:bg-black/20 border border-white/20 text-black dark:text-white placeholder:text-black/50 dark:placeholder:text-white/50"
+            />
+            <Input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={handleChange}
+              required
+              className="bg-white/10 dark:bg-black/20 border border-white/20 text-black dark:text-white placeholder:text-black/50 dark:placeholder:text-white/50"
+            />
+            <Input
+              type="password"
+              name="matchingPassword"
+              placeholder="Confirm Password"
+              onChange={handleChange}
+              required
+              className="bg-white/10 dark:bg-black/20 border border-white/20 text-black dark:text-white placeholder:text-black/50 dark:placeholder:text-white/50"
+            />
 
-<div className="flex w-full gap-4">
-  <Button
-    type="submit"
-    className="flex-1 bg-white/90 backdrop-blur-md border border-white/30 text-black uppercase tracking-wide hover:bg-purple-300 hover:text-black transition-all duration-200"
-  >
-    Register
-  </Button>
+            <div className="flex w-full gap-4">
+              <Button
+                type="submit"
+                className="flex-1 bg-black/90 dark:bg-white/90 backdrop-blur-md border border-white/30 text-white dark:text-black uppercase tracking-wide hover:bg-purple-400/70 hover:text-black transition-all duration-200"
+              >
+                Register
+              </Button>
 
-  <Button
-    type="button"
-    onClick={() => window.location.href = '/login'}
-    className="flex-1 bg-white/10 backdrop-blur-md border border-white/30 text-white uppercase tracking-wide hover:bg-purple-400/70 hover:text-white transition-all duration-200"
-  >
-    Login instead
-  </Button>
-</div>
-
-</form>
-
+              <Button
+                type="button"
+                onClick={() => window.location.href = '/login'}
+                className="flex-1 bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/30 text-black dark:text-white uppercase tracking-wide hover:bg-purple-400/70 hover:text-white transition-all duration-200"
+              >
+                Login instead
+              </Button>
+            </div>
+          </form>
         </CardContent>
-      </Card>
+      </GlassCard>
     </div>
-
-    
   );
 }
