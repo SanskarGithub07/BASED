@@ -1,5 +1,6 @@
 package com.application.based.filter;
 
+import com.application.based.repository.BlacklistedJWTTokenRepository;
 import com.application.based.service.CustomUserDetailsService;
 import com.application.based.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -21,9 +22,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
     private final JwtService jwtService;
 
-    public JwtAuthFilter(CustomUserDetailsService userDetailsService, JwtService jwtService) {
+    private final BlacklistedJWTTokenRepository blacklistedJWTTokenRepository;
+
+    public JwtAuthFilter(CustomUserDetailsService userDetailsService, JwtService jwtService, BlacklistedJWTTokenRepository blacklistedJWTTokenRepository) {
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
+        this.blacklistedJWTTokenRepository = blacklistedJWTTokenRepository;
     }
 
     @Override
@@ -35,6 +39,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
+
+            if (blacklistedJWTTokenRepository.existsByToken(token)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             username = jwtService.extractUsername(token);
         }
 
