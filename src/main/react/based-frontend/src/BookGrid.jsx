@@ -26,8 +26,8 @@ export default function BookGrid() {
     "book-name": "",
     "min-price": 0,
     "max-price": 5000,
-    availability: "IN_STOCK", // Changed from empty string to "ANY"
-    "publication-year": null, // Changed from empty string to null
+    availability: "IN_STOCK",
+    "publication-year": null,
     publisher: "",
     page: 0,
     size: 6,
@@ -256,6 +256,33 @@ export default function BookGrid() {
                         <p><strong>Published:</strong> {book.publicationYear}</p>
                       </div>
                     </div>
+                    <Button
+                      className="mt-4"
+                      onClick={async () => {
+                        try {
+                          const token = localStorage.getItem("authToken"); // Assuming you store your token in localStorage
+                          console.log(token);
+                          const payload = {
+                            bookIsbn: book.isbn,
+                            quantity: 1, // You can make this dynamic later
+                          };
+
+                          await axios.post("http://localhost:8080/api/cart/add", payload, {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+
+                          alert("Book added to cart!");
+                        } catch (error) {
+                          console.error("Error adding to cart:", error);
+                          alert("Failed to add book to cart.");
+                        }
+                      }}
+                    >
+                      🛒 Add to Cart
+                    </Button>
+
                   </DialogContent>
                 </Dialog>
               </CardHeader>

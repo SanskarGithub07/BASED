@@ -4,10 +4,7 @@ import com.application.based.entity.User;
 import com.application.based.entity.VerificationToken;
 import com.application.based.event.RegistrationCompleteEvent;
 import com.application.based.model.*;
-import com.application.based.service.EmailService;
-import com.application.based.service.JwtService;
-import com.application.based.service.RegistrationService;
-import com.application.based.service.UserService;
+import com.application.based.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,12 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,6 +47,9 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private BlacklistedJWTTokenService blacklistedJWTTokenService;
+
     private String applicationUrl(HttpServletRequest request){
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
@@ -68,13 +68,19 @@ public class AuthController {
 
     @PostMapping("/login")
     public JwtAuthResponseModel authenticateAndGetToken(@RequestBody LoginModel loginModel) {
+        String input = loginModel.getUsernameOrEmail();
+        String loginType = input.contains("@") ? "email" : "username";
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginModel.getUsernameOrEmail(), loginModel.getPassword())
         );
 
         System.out.println(authentication.toString());
         if (authentication.isAuthenticated()) {
-            String token = jwtService.generateToken(loginModel.getUsernameOrEmail());
+            UserInfoDetails userInfoDetails = (UserInfoDetails) authentication.getPrincipal();
+            System.out.println(userInfoDetails.getUsername());
+            System.out.println(loginType);
+            String token = jwtService.generateToken(userInfoDetails.getUsername(), loginType);
             System.out.println(token);
             JwtAuthResponseModel jwtAuthResponseModel = JwtAuthResponseModel
                     .builder()
@@ -88,9 +94,16 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-        SecurityContextHolder.clearContext(); // Clears authentication session
-        return ResponseEntity.ok("Logged out successfully");
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String authHeader) {
+        if(authHeader != null && authHeader.startsWith("Bearer ")){
+            String token = authHeader.substring(7);
+            Date expiry = jwtService.extractExpiration(token);
+
+            blacklistedJWTTokenService.createExpirationToken(token, expiry);
+            return ResponseEntity.ok("Logged out successfully");
+        }
+
+        return ResponseEntity.badRequest().body("Token is missing");
     }
 
     @GetMapping("/verifyRegistration")

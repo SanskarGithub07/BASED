@@ -21,8 +21,9 @@ public class JwtService {
     @Value("${app.jwt.secret}")
     public String SECRET;
 
-    public String generateToken(String usernameOrEmail) {
+    public String generateToken(String usernameOrEmail, String loginType) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("loginType", loginType);
         return createToken(claims, usernameOrEmail);
     }
 
@@ -67,8 +68,16 @@ public class JwtService {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String usernameFromToken = extractUsername(token);
+        final String loginType = extractClaim(token, claims -> claims.get("loginType").toString());
+
+        if (loginType.equals("email") && userDetails instanceof UserInfoDetails) {
+            return usernameFromToken.equals(((UserInfoDetails) userDetails).getEmail()) && !isTokenExpired(token);
+        } else if (loginType.equals("username") && userDetails instanceof UserInfoDetails) {
+            return usernameFromToken.equals(((UserInfoDetails) userDetails).getUsernameOnly()) && !isTokenExpired(token);
+        }
+
+        return false;
     }
 }
 

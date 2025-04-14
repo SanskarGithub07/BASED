@@ -10,6 +10,7 @@ import BookManagement from "./pages/BookManagement";
 import BookGrid from "./BookGrid";
 import BookManagementNew from "./pages/BookManagementNew"
 import AuthPage from "./pages/AuthPage";
+import Cart from "./Cart";
 import BookRequest from "./pages/BookRequest";
 
 import Header from "./components/xp-ui/Header";
@@ -33,10 +34,17 @@ export default function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/books" element={<BookManagement />} />
-        <Route path="/books/search" element={<BookGrid />}/>
         <Route path="/books/request" element={<BookRequest />} />
-        <Route path="/booksnew" element={<BookManagementNew />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route 
+          path="/books/search"
+          element= {token ? <BookGrid /> : <Navigate to="/login" />}
+        />
+        <Route path="/booksnew" element={<BookManagementNew />} />
+        <Route 
+          path="/cart" 
+          element={token ? <Cart /> : <Navigate to="/login" />}
+        />
         <Route
           path="/dashboard"
           element={token ? <CustomerDashboard /> : <Navigate to="/login" />}

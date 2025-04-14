@@ -13,14 +13,18 @@ public class UserInfoDetails implements UserDetails {
 
     private String username;
     private String password;
+    private String email;
+    private String usernameOnly;
     private List<GrantedAuthority> authorities;
 
     public UserInfoDetails(User user, boolean useEmail) {
+        this.email = user.getEmail();
+        this.usernameOnly = user.getUsername();
         if(useEmail){
-            this.username = user.getEmail();
+            this.username = email;
         }
         else{
-            this.username = user.getUsername();
+            this.username = usernameOnly;
         }
         this.password = user.getPassword();
         this.authorities = user.getRoles().stream()
@@ -31,6 +35,14 @@ public class UserInfoDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUsernameOnly() {
+        return usernameOnly;
     }
 
     @Override
