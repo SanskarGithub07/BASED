@@ -1,0 +1,174 @@
+/* Global styles */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Custom dark variant definition */
+@custom-variant dark (&:is(.dark *));
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f8f9fa;
+}
+
+/* Define global CSS variables for colours and themes */
+:root {
+    --radius: 0.625rem;
+    
+    /* Neutral Colours */
+    --background-light: #f8f9fa; /* Light background */
+    --background-dark: #121212; /* Dark background */
+    --foreground-light: #000; /* Light foreground (text) */
+    --foreground-dark: #fff; /* Dark foreground (text) */
+    --border-light: #e0e0e0; /* Light border */
+    --border-dark: #333; /* Dark border */
+    
+    /* Primary & Secondary Colours (used for buttons, accents, etc.) */
+    --primary-light: oklch(0.205 0 0); /* Light primary colour */
+    --primary-dark: oklch(0.922 0 0); /* Dark primary colour */
+    --secondary-light: oklch(0.97 0 0); /* Light secondary colour */
+    --secondary-dark: oklch(0.269 0 0); /* Dark secondary colour */
+    --accent-light: oklch(0.97 0 0); /* Light accent colour */
+    --accent-dark: oklch(0.269 0 0); /* Dark accent colour */
+    
+    /* Button Colours */
+    --button-light-bg: #000; /* Light button background */
+    --button-dark-bg: #fff; /* Dark button background */
+    --button-hover-light: #6a0dad; /* Light button hover */
+    --button-hover-dark: #b23dff; /* Dark button hover */
+    
+    /* Form Input Colours */
+    --input-light-bg: #f0f0f0; /* Light input background */
+    --input-dark-bg: #333; /* Dark input background */
+    --input-border-light: #ccc; /* Light input border */
+    --input-border-dark: #444; /* Dark input border */
+    --input-placeholder-light: #888; /* Light input placeholder */
+    --input-placeholder-dark: #bbb; /* Dark input placeholder */
+    
+    /* Alert Colours */
+    --alert-success-bg: #4CAF50; /* Success alert background */
+    --alert-error-bg: #f44336; /* Error alert background */
+    --alert-text-light: #fff; /* Alert text colour for light theme */
+    --alert-text-dark: #000; /* Alert text colour for dark theme */
+}
+
+/* Dark mode variables */
+.dark {
+    --background: var(--background-dark); /* Dark background */
+    --foreground: var(--foreground-dark); /* Dark foreground */
+    --border: var(--border-dark); /* Dark border */
+    
+    /* Dark colours for primary, secondary, and other theme elements */
+    --primary: var(--primary-dark); /* Dark primary colour */
+    --secondary: var(--secondary-dark); /* Dark secondary colour */
+    --accent: var(--accent-dark); /* Dark accent colour */
+    
+    /* Dark button styles */
+    --button-bg: var(--button-dark-bg); /* Dark button background */
+    --button-hover: var(--button-hover-dark); /* Dark button hover */
+    
+    /* Dark input styles */
+    --input-bg: var(--input-dark-bg); /* Dark input background */
+    --input-border: var(--input-border-dark); /* Dark input border */
+    --input-placeholder: var(--input-placeholder-dark); /* Dark input placeholder */
+    
+    /* Alert colours for dark mode */
+    --alert-success-bg: #388e3c; /* Success alert background (dark mode) */
+    --alert-error-bg: #d32f2f; /* Error alert background (dark mode) */
+    --alert-text: var(--alert-text-dark); /* Alert text colour (dark mode) */
+}
+
+/* Adding theme variations for border, inputs, and button background */
+@theme inline {
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card); /* Assuming you define --card elsewhere */
+    --color-card-foreground: var(--card-foreground); /* Assuming you define --card-foreground elsewhere */
+    --color-popover: var(--popover); /* Assuming you define --popover elsewhere */
+    --color-popover-foreground: var(--popover-foreground); /* Assuming you define --popover-foreground elsewhere */
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground); /* Assuming you define --primary-foreground elsewhere */
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground); /* Assuming you define --secondary-foreground elsewhere */
+    --color-muted: var(--muted); /* Assuming you define --muted elsewhere */
+    --color-muted-foreground: var(--muted-foreground); /* Assuming you define --muted-foreground elsewhere */
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground); /* Assuming you define --accent-foreground elsewhere */
+    --color-destructive: var(--destructive); /* Assuming you define --destructive elsewhere */
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring); /* Assuming you define --ring elsewhere */
+    --color-chart-1: var(--chart-1); /* Assuming you define --chart-1 elsewhere */
+    --color-chart-2: var(--chart-2); /* Assuming you define --chart-2 elsewhere */
+    --color-chart-3: var(--chart-3); /* Assuming you define --chart-3 elsewhere */
+    --color-chart-4: var(--chart-4); /* Assuming you define --chart-4 elsewhere */
+    --color-chart-5: var(--chart-5); /* Assuming you define --chart-5 elsewhere */
+    --color-sidebar: var(--sidebar); /* Assuming you define --sidebar elsewhere */
+    --color-sidebar-foreground: var(--sidebar-foreground); /* Assuming you define --sidebar-foreground elsewhere */
+    --color-sidebar-primary: var(--sidebar-primary); /* Assuming you define --sidebar-primary elsewhere */
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground); /* Assuming you define --sidebar-primary-foreground elsewhere */
+    --color-sidebar-accent: var(--sidebar-accent); /* Assuming you define --sidebar-accent elsewhere */
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground); /* Assuming you define --sidebar-accent-foreground elsewhere */
+    --color-sidebar-border: var(--sidebar-border); /* Assuming you define --sidebar-border elsewhere */
+    --color-sidebar-ring: var(--sidebar-ring); /* Assuming you define --sidebar-ring elsewhere */
+    
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+/* Basic global styling for body */
+@layer base {
+    * {
+        @apply border-[var(--color-border)] outline-ring/50;
+    }
+    body {
+        @apply bg-[var(--color-background)] text-[var(--color-foreground)];
+    }
+    button {
+        background-color: var(--color-button-bg);
+        border-color: var(--color-border);
+        color: var(--color-foreground);
+    }
+    button:hover {
+        background-color: var(--color-button-hover);
+    }
+    input {
+        background-color: var(--color-input-bg);
+        border-color: var(--color-input-border);
+        color: var(--color-foreground);
+    }
+    input::placeholder {
+        color: var(--color-input-placeholder);
+    }
+    .alert-success {
+        background-color: var(--color-alert-success-bg);
+        color: var(--color-alert-text);
+    }
+    .alert-error {
+        background-color: var(--color-alert-error-bg);
+        color: var(--color-alert-text);
+    }
+}
+
+/* Floating random animation */
+@keyframes floatRandom {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(var(--x, 20px), var(--y, 20px)) rotate(var(--r, 30deg));
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+.float-random {
+    animation: floatRandom var(--duration, 10s) ease-in-out infinite;
+}
