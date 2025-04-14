@@ -1,6 +1,7 @@
 package com.application.based.service;
 
 import com.application.based.entity.BookRequest;
+import com.application.based.entity.User;
 import com.application.based.model.BookRequestModel;
 import com.application.based.model.RequestStatus;
 import com.application.based.repository.BookRepository;
@@ -18,7 +19,7 @@ public class BookRequestServiceImpl implements BookRequestService {
     private BookRequestRepository bookRequestRepository;
 
     @Override
-    public String handleBookRequest(BookRequestModel model) {
+    public String handleBookRequest(BookRequestModel model, User user) {
         if (bookRepository.findByIsbn(model.getIsbn()).isPresent()) {
             return "Book already exists in the system.";
         }
@@ -32,8 +33,8 @@ public class BookRequestServiceImpl implements BookRequestService {
                 .authorName(model.getAuthorName())
                 .isbn(model.getIsbn())
                 .quantity(model.getQuantity())
-                .requesterName(model.getRequesterName())
-                .requesterEmail(model.getRequesterEmail())
+                .requesterName(user.getUsername())
+                .requesterEmail(user.getEmail())
                 .additionalNotes(model.getAdditionalNotes())
                 .status(RequestStatus.PENDING)
                 .build();

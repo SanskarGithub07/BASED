@@ -1,6 +1,5 @@
 package com.application.based.model;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -23,12 +22,6 @@ public class BookRequestModel {
     private String isbn;
 
     private Long quantity;
-
-    @NotBlank(message = "Requester name is required")
-    private String requesterName;
-
-    @Email(message = "Invalid email")
-    private String requesterEmail;
 
     private String additionalNotes;
 }
