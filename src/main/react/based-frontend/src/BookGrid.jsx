@@ -275,6 +275,7 @@ export default function BookGrid() {
                           alt={book.bookName}
                           className="rounded-xl w-full object-cover"
                           onError={handleImageError}
+                          onLoad={handleImageLoad}
                         />
                       </div>
                       <div className="col-span-2">
