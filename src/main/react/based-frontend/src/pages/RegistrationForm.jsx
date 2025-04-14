@@ -101,7 +101,7 @@ export default function RegistrationForm() {
             <div className="flex w-full gap-4">
               <Button
                 type="submit"
-                className="flex-1 bg-black/90 dark:bg-white/90 backdrop-blur-md border border-white/30 text-white dark:text-black uppercase tracking-wide hover:bg-purple-400/70 hover:text-black transition-all duration-200"
+                className="flex-1 bg-black/90 dark:bg-white/90 backdrop-blur-md border border-white/30 text-white dark:text-black uppercase tracking-wide hover:bg-purple-400/70 hover:text-black dark:hover:bg-purple-500 dark:hover:text-white transition-all duration-200"
               >
                 Register
               </Button>
@@ -109,7 +109,7 @@ export default function RegistrationForm() {
               <Button
                 type="button"
                 onClick={() => window.location.href = '/login'}
-                className="flex-1 bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/30 text-black dark:text-white uppercase tracking-wide hover:bg-purple-400/70 hover:text-white transition-all duration-200"
+                className="flex-1 bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/30 text-black dark:text-white uppercase tracking-wide hover:bg-purple-400/70 hover:text-white dark:hover:bg-purple-500 dark:hover:text-white transition-all duration-200"
               >
                 Login instead
               </Button>
