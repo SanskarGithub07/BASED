@@ -1,10 +1,15 @@
 package com.application.based.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,4 +47,8 @@ public class Book {
     private String imageUrl;
 
     private String genre;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    private List<Cart> carts;
 }

@@ -39,6 +39,11 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
+    public Book getBookByIsbn(String isbn){
+        return bookRepository.findByIsbn(isbn).get();
+    }
+
+    @Override
     public List<Book> searchBooks(String authorName, String isbnNumber, String bookName){
         if(isbnNumber != null){
             Optional<Book> book = bookRepository.findByIsbn(isbnNumber);

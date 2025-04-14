@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService{
     private PasswordEncoder passwordEncoder;
     @Override
     public User getUserByEmailId(String emailId){
-        return userRepository.findByEmail(emailId);
+        return userRepository.findByEmail(emailId).get();
     }
 
     @Override
