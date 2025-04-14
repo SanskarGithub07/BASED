@@ -30,6 +30,7 @@ export default function LoginPage() {
       );
 
       if (response.data.accessToken) {
+        console.log(response.data.accessToken);
         localStorage.setItem("authToken", response.data.accessToken);
         navigate("/dashboard");
       } else {

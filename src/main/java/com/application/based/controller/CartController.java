@@ -45,7 +45,7 @@ public class CartController {
         User user = authenticatedUserUtil.getCurrentAuthenticatedUser(request);
         CartDto cartDto = cartService.listCartItems(user);
 
-        return ResponseEntity.status(HttpStatus.FOUND).body(cartDto);
+        return ResponseEntity.status(HttpStatus.OK).body(cartDto);
     }
 
     @PutMapping("/update/{cartItemId}")
