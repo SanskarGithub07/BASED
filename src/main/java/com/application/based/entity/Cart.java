@@ -2,10 +2,7 @@ package com.application.based.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -33,5 +30,10 @@ public class Cart {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    private int quantity;
+    private Long quantity;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = new Date();
+    }
 }

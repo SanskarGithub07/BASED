@@ -1,5 +1,6 @@
 package com.application.based.model.cart;
 
+import com.application.based.entity.Book;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +9,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class AddToCartDto {
-    private @NotNull String bookIsbn;
+@NoArgsConstructor
+public class CartItemDto {
+    private Long id;
     private @NotNull Long quantity;
+    private @NotNull Book book;
 }
