@@ -4,10 +4,7 @@ import com.application.based.entity.User;
 import com.application.based.entity.VerificationToken;
 import com.application.based.event.RegistrationCompleteEvent;
 import com.application.based.model.*;
-import com.application.based.service.EmailService;
-import com.application.based.service.JwtService;
-import com.application.based.service.RegistrationService;
-import com.application.based.service.UserService;
+import com.application.based.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -68,13 +65,19 @@ public class AuthController {
 
     @PostMapping("/login")
     public JwtAuthResponseModel authenticateAndGetToken(@RequestBody LoginModel loginModel) {
+        String input = loginModel.getUsernameOrEmail();
+        String loginType = input.contains("@") ? "email" : "username";
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginModel.getUsernameOrEmail(), loginModel.getPassword())
         );
 
         System.out.println(authentication.toString());
         if (authentication.isAuthenticated()) {
-            String token = jwtService.generateToken(loginModel.getUsernameOrEmail());
+            UserInfoDetails userInfoDetails = (UserInfoDetails) authentication.getPrincipal();
+            System.out.println(userInfoDetails.getUsername());
+            System.out.println(loginType);
+            String token = jwtService.generateToken(userInfoDetails.getUsername(), loginType);
             System.out.println(token);
             JwtAuthResponseModel jwtAuthResponseModel = JwtAuthResponseModel
                     .builder()
