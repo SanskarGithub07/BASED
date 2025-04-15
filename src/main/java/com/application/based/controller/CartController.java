@@ -54,4 +54,11 @@ public class CartController {
         cartService.updateCartItem(quantity, user, itemId);
         return ResponseEntity.status(HttpStatus.OK).body("Cart Item successfully updated.");
     }
+
+    @DeleteMapping("/delete/{cartItemId}")
+    public ResponseEntity<String> deleteCartItem(@PathVariable("cartItemId") Long itemId, HttpServletRequest request){
+        User user = authenticatedUserUtil.getCurrentAuthenticatedUser(request);
+        cartService.deleteCartItem(itemId, user);
+        return ResponseEntity.status(HttpStatus.OK).body("Cart Item successfully deleted.");
+    }
 }

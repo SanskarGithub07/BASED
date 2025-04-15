@@ -17,4 +17,6 @@ public interface CartService {
     void updateCartItem(Long quantity, User user, Long itemId);
 
     CartItemDto getDtoFromCart(Cart cart);
+
+    void deleteCartItem(Long itemId, User user);
 }
