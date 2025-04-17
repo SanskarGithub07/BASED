@@ -88,4 +88,11 @@ public class CartServiceImpl implements CartService{
                 .id(cart.getId())
                 .build();
     }
+
+    @Override
+    public void deleteUserCartItems(User user){
+        cartRepository.deleteByUser(user);
+    }
+
+
 }

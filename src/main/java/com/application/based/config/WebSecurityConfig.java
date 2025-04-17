@@ -41,7 +41,7 @@ public class WebSecurityConfig {
 //                .cors(cors ->  cors.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/welcome", "/api/auth/register", "/api/auth/login", "/api/auth/verifyRegistration", "/api/auth/resendVerifyToken").permitAll()
-                        .requestMatchers("/api/auth/customer/**", "/api/cart/**", "/api/book/**").hasAuthority("ROLE_CUSTOMER")
+                        .requestMatchers("/api/auth/customer/**", "/api/cart/**", "/api/book/**", "/api/order/**").hasAuthority("ROLE_CUSTOMER")
                         .requestMatchers("/api/auth/staff/**").hasAuthority("ROLE_STAFF")
                         .requestMatchers("/api/auth/employee/**").hasAuthority("ROLE_EMPLOYEE")
                         .anyRequest().authenticated()
