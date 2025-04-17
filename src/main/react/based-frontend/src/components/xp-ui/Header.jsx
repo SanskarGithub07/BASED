@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, ShoppingCart } from "lucide-react"; // Import ShoppingCart icon
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -31,9 +31,8 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b bg-white/50 dark:bg-black/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         <Link to="/" className="text-xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
-  SE Project
-</Link>
-
+          SE Project
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6 items-center">
@@ -50,6 +49,17 @@ export default function Header() {
               {link.name}
             </NavLink>
           ))}
+
+          {/* Cart Button for Desktop */}
+          <Button
+            variant="ghost"
+            size="icon"
+            asChild // Use asChild to allow Link to be the actual button
+          >
+            <Link to="/cart" aria-label="View Cart"> {/* Added aria-label for accessibility */}
+              <ShoppingCart className="h-5 w-5" />
+            </Link>
+          </Button>
 
           <Button
             variant="ghost"
@@ -70,6 +80,17 @@ export default function Header() {
             {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
 
+          {/* Mobile Cart Button (Next to Theme Toggle) */}
+          <Button
+            variant="ghost"
+            size="icon"
+            asChild // Use asChild to allow Link to be the actual button
+          >
+            <Link to="/cart" aria-label="View Cart"> {/* Added aria-label for accessibility */}
+              <ShoppingCart className="h-5 w-5" />
+            </Link>
+          </Button>
+
           <Button
             variant="ghost"
             size="icon"
@@ -79,7 +100,7 @@ export default function Header() {
           </Button>
         </div>
       </div>
-          
+
       {/* Mobile Nav */}
       <AnimatePresence>
         {isOpen && (
@@ -104,6 +125,14 @@ export default function Header() {
                   {link.name}
                 </NavLink>
               ))}
+              {/* Cart Link in Mobile Menu */}
+              <NavLink
+                to="/cart"
+                className="text-muted-foreground hover:text-foreground"
+                onClick={() => setIsOpen(false)}
+              >
+                Cart
+              </NavLink>
             </nav>
           </motion.div>
         )}
