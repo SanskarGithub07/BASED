@@ -286,6 +286,12 @@ export default function BookGrid() {
                         <p><strong>Price:</strong> ₹{book.price}</p>
                         <p><strong>Available:</strong> {book.availability === "IN_STOCK" ? "Yes" : "No"}</p>
                         <p><strong>Published:</strong> {book.publicationYear}</p>
+                        <div className="mt-4">
+                          <p><strong>Description:</strong></p>
+                          <p className="text-sm mt-1">
+                            {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </DialogContent>
