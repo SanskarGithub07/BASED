@@ -1,6 +1,6 @@
 package com.application.based.repository;
 
-import com.application.based.entity.Cart;
+import com.application.based.entity.Order;
 import com.application.based.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Long> {
-    List<Cart> findByUserOrderByCreatedDateDesc(User user);
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    boolean existsBySessionId(String sessionId);
 
-    void deleteByUser(User user);
+    List<Order> findAllByUserOrderByCreatedDateDesc(User user);
 }
