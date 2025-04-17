@@ -79,7 +79,6 @@ public class BookInitializer implements CommandLineRunner {
                                 .quantity(randomQuantity)
                                 .availability(randomQuantity > 0 ? "IN_STOCK" : "OUT_OF_STOCK")
                                 .build();
-
                         bookRepository.save(book);
                     }
 

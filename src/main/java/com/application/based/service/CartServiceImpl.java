@@ -61,9 +61,23 @@ public class CartServiceImpl implements CartService{
         if(!cart.getUser().getId().equals(user.getId())){
             throw new RuntimeException("Unauthorized to update this cart item.");
         }
+        if(quantity > cart.getBook().getQuantity()){
+            throw new RuntimeException("Book quantity exceeds the amount available in the database");
+        }
         cart.setQuantity(quantity);
         cart.setCreatedDate(new Date());
         cartRepository.save(cart);
+    }
+
+    @Override
+    public void deleteCartItem(Long itemId, User user){
+        Cart cart = cartRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+
+        if(!cart.getUser().getId().equals(user.getId())){
+            throw new RuntimeException("Unauthorized to delete this cart item.");
+        }
+        cartRepository.delete(cart);
     }
 
     @Override
@@ -74,4 +88,11 @@ public class CartServiceImpl implements CartService{
                 .id(cart.getId())
                 .build();
     }
+
+    @Override
+    public void deleteUserCartItems(User user){
+        cartRepository.deleteByUser(user);
+    }
+
+
 }

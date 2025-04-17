@@ -59,10 +59,13 @@ export default function BookGrid() {
           }
         }
       });
-      
+      const token = localStorage.getItem("authToken");
       // Use axios to make the request with properly structured params
       const res = await axios.get("http://localhost:8080/api/book/filtering&pagination&sorting", {
         params,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (res.data?.content) {
