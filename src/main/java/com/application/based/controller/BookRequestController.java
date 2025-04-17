@@ -30,14 +30,23 @@ public class BookRequestController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+//    @PatchMapping("/{requestId}/status")
+//    public ResponseEntity<String> updateRequestStatus(
+//            @PathVariable Long requestId,
+//            @RequestParam RequestStatus status,
+//            HttpServletRequest request) {
+//
+//        // TODO Add admin/owner check here
+//        String response = bookRequestService.updateRequestStatus(requestId, status);
+//        return ResponseEntity.ok(response);
+//    }
+
     @PatchMapping("/{requestId}/status")
     public ResponseEntity<String> updateRequestStatus(
             @PathVariable Long requestId,
-            @RequestParam RequestStatus status,
-            HttpServletRequest request) {
+            @RequestParam RequestStatus status) {
 
-        // TODO Add admin/owner check here
-        String response = bookRequestService.updateRequestStatus(requestId, status);
-        return ResponseEntity.ok(response);
+        String result = bookRequestService.updateRequestStatus(requestId, status);
+        return ResponseEntity.ok(result);
     }
 }

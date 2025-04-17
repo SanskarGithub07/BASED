@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @Builder
@@ -22,8 +25,16 @@ public class BookRequest {
     private String authorName;
     private String isbn;
     private Long quantity;
-    private String requesterName;
-    private String requesterEmail;
+
+    @ManyToMany
+    @JoinTable(
+            name = "book_request_requesters",
+            joinColumns = @JoinColumn(name = "book_request_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @Builder.Default
+    private Set<User> requesters = new HashSet<>();
+
     private String additionalNotes;
 
     @Enumerated(EnumType.STRING)
