@@ -46,7 +46,7 @@ export default function CustomerDashboard() {
     {
       title: "Book Request",
       description: "Can't find what you need?",
-      link: "/book/request",
+      link: "/request/book",
       icon: "📚",
       className: "col-span-1 row-span-2 bg-green-500/10"
     },
