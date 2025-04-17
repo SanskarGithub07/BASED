@@ -2,6 +2,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import axios from "axios";
+import FloatingIconsBackground from "../components/xp-ui/FloatingiconsBackground";
+import GlassCard from "../components/xp-ui/GlassCard";
 
 export default function CustomerDashboard() {
   const navigate = useNavigate();
@@ -58,12 +60,15 @@ export default function CustomerDashboard() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 px-4">
-      <Card className="w-full max-w-md text-center">
-        <CardContent className="p-8">
-          <h1 className="text-3xl font-semibold text-blue-500 mb-8">
-            Welcome to Customer Dashboard
-          </h1>
+    <div className="relative min-h-screen overflow-hidden bg-white/90 dark:bg-black/90 text-black dark:text-white transition-colors duration-300">
+      <div className="absolute inset-0 z-0">
+        <FloatingIconsBackground />
+      </div>
+
+      <div className="relative z-10 container mx-auto px-4 py-12">
+        <h1 className="text-4xl font-bold text-center mb-12">
+          Welcome to Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Dashboard</span>
+        </h1>
 
         <div className="grid grid-cols-3 grid-rows-2 gap-6 max-w-4xl mx-auto">
           {bentoCards.map((card, index) => (
