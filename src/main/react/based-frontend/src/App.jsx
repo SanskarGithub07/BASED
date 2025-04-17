@@ -15,6 +15,7 @@ import BookRequest from "./pages/BookRequest";
 
 import Header from "./components/xp-ui/Header";
 import { initTheme } from "./lib/utils.js";
+import OrdersPage from "./pages/OrdersPage";
 
 export default function App() {
   const token = localStorage.getItem("authToken");
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/books" element={<BookManagement />} />
         <Route path="/books/request" element={<BookRequest />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/orders" element={<OrdersPage />}/>
         <Route 
           path="/books/search"
           element= {token ? <BookGrid /> : <Navigate to="/login" />}
