@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import GlassCard from "../components/xp-ui/GlassCard";
-
+import RecentBookRequests from "./RecentBookRequests";
 
 export default function BookRequestForm() {
   const [formData, setFormData] = useState({
@@ -19,6 +19,7 @@ export default function BookRequestForm() {
     additionalNotes: ""
   });
   const [loading, setLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -26,9 +27,15 @@ export default function BookRequestForm() {
     setLoading(true);
     
     try {
-      // console.log("Submitting:", formData); // Debug log
-      
       const token = localStorage.getItem("authToken");
+      
+      // Check if token exists before making the request
+      if (!token) {
+        toast.error("Please login to submit a request");
+        navigate("/login");
+        return;
+      }
+
       const response = await axios.post(
         "http://localhost:8080/api/request/book", 
         formData,
@@ -36,25 +43,56 @@ export default function BookRequestForm() {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
-          }
+          },
+          validateStatus: (status) => status < 500 // Don't throw for 4xx errors
         }
       );
 
-      // console.log("Response:", response); // Debug log
-      toast.success(response.data);
+      // Handle specific status codes
+      if (response.status === 403) {
+        toast.error("Session expired - please login again");
+        localStorage.removeItem("authToken");
+        // navigate("/login");
+        return;
+      }
+
+      if (response.status === 200) {
+        toast.success(response.data);
+        setFormData({
+          bookName: "",
+          authorName: "",
+          isbn: "",
+          quantity: 1,
+          additionalNotes: ""
+        });
+        setRefreshKey(prev => prev + 1);
+      } else {
+        // Handle other successful status codes (201, etc)
+        toast.success("Request submitted successfully");
+        setFormData({
+          bookName: "",
+          authorName: "",
+          isbn: "",
+          quantity: 1,
+          additionalNotes: ""
+        });
+        setRefreshKey(prev => prev + 1);
+      }
     } catch (error) {
-      console.error("Submission error:", {
-        error: error.response?.data,
-        status: error.response?.status,
-        headers: error.response?.headers
-      });
+      console.error("Full error object:", error);
       
       const errorMessage = error.response?.data?.message 
         || error.response?.data
         || error.message
         || "Failed to submit request";
       
-      toast.error(errorMessage);
+      if (error.response?.status === 403) {
+        toast.error("Authentication failed - please login again");
+        localStorage.removeItem("authToken");
+        // navigate("/login");
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -62,7 +100,7 @@ export default function BookRequestForm() {
 
   return (
     <>
-      <Toaster position="bottom-center" richColors /> {}
+      <Toaster position="bottom-center" richColors />
       <GlassCard className="max-w-2xl mx-auto p-8">
         <h2 className="text-2xl font-bold mb-6 text-center">Request a Book</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -133,6 +171,9 @@ export default function BookRequestForm() {
             </Button>
           </div>
         </form>
+
+        {/* Recent Requests Section */}
+        <RecentBookRequests key={refreshKey} />
       </GlassCard>
     </>
   );

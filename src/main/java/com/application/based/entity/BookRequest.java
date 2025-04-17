@@ -26,7 +26,7 @@ public class BookRequest {
     private String isbn;
     private Long quantity;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_request_requesters",
             joinColumns = @JoinColumn(name = "book_request_id"),

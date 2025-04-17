@@ -15,7 +15,7 @@ import Cart from "./Cart";
 
 import BookRequest from "./pages/BookRequest";
 
-import BookRequestForm from "./pages/BookRequestForm";
+import BookRequestForm from "./components/BookRequestForm";
 import Header from "./components/xp-ui/Header";
 import { initTheme } from "./lib/utils.js";
 import OrdersPage from "./pages/OrdersPage";
