@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import axios from "axios";
 
+import FloatingIconsBackground from "@/components/xp-ui/FloatingiconsBackground";
+
 export default function CustomerDashboard() {
   const navigate = useNavigate();
 
@@ -35,7 +37,9 @@ export default function CustomerDashboard() {
   };
 
   return (
+    
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 px-4">
+      <FloatingIconsBackground></FloatingIconsBackground>
       <Card className="w-full max-w-md text-center">
         <CardContent className="p-8">
           <h1 className="text-3xl font-semibold text-blue-500 mb-8">
