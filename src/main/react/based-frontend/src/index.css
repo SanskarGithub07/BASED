@@ -162,5 +162,3 @@ body {
 .float-random {
 animation: floatRandom var(--duration, 10s) ease-in-out infinite;
 }
-
-  
