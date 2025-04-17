@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import {
   Card,
@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+const DEFAULT_BOOK_IMAGE = "/placeholder.jpeg";
+const MIN_IMAGE_DIMENSION = 10;
 
 export default function BookGrid() {
   const [filters, setFilters] = useState({
@@ -102,12 +104,38 @@ export default function BookGrid() {
     setFilters(prev => ({ ...prev, page: 0 }));
     fetchBooks();
   };
+  const handleImageError = useCallback((event) => {
+    event.target.src = DEFAULT_BOOK_IMAGE;
+    event.target.onerror = null; // Prevent infinite loops if the default image also fails
+  }, []);
+
+  const handleImageLoad = useCallback(async (event) => {
+    const img = event.target;
+    if (!isValidImageDimension(img.naturalWidth, img.naturalHeight)) {
+      img.src = DEFAULT_BOOK_IMAGE;
+    }
+  }, []);
 
   const yearOptions = [];
   const currentYear = new Date().getFullYear();
   for (let i = 0; i < 30; i++) {
     yearOptions.push(currentYear - i);
   }
+  const isValidImageDimension = (width, height) => {
+    return width > MIN_IMAGE_DIMENSION && height > MIN_IMAGE_DIMENSION;
+  };
+  const validateImage = (url) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve(isValidImageDimension(img.width, img.height));
+      };
+      img.onerror = () => {
+        resolve(false);
+      };
+      img.src = url;
+    });
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
@@ -235,18 +263,22 @@ export default function BookGrid() {
                 <Dialog>
                   <DialogTrigger asChild>
                     <img
-                      src={book.imageUrl}
+                      src={book.imageUrl || DEFAULT_BOOK_IMAGE}
                       alt={book.bookName}
                       className="rounded-xl cursor-pointer h-48 w-full object-cover"
+                      onError={handleImageError}
+                      onLoad={handleImageLoad}
                     />
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
                     <div className="grid grid-cols-3 gap-4">
                       <div className="col-span-1">
                         <img
-                          src={book.imageUrl}
+                          src={book.imageUrl || DEFAULT_BOOK_IMAGE}
                           alt={book.bookName}
                           className="rounded-xl w-full object-cover"
+                          onError={handleImageError}
+                          onLoad={handleImageLoad}
                         />
                       </div>
                       <div className="col-span-2">
@@ -257,6 +289,12 @@ export default function BookGrid() {
                         <p><strong>Price:</strong> ₹{book.price}</p>
                         <p><strong>Available:</strong> {book.availability === "IN_STOCK" ? "Yes" : "No"}</p>
                         <p><strong>Published:</strong> {book.publicationYear}</p>
+                        <div className="mt-4">
+                          <p><strong>Description:</strong></p>
+                          <p className="text-sm mt-1">
+                            {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}
+                          </p>
+                        </div>
                       </div>
                     </div>
                     <Button
