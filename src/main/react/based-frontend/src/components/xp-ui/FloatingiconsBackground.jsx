@@ -14,7 +14,7 @@ const randomFloatBooks = Array.from({ length: 25 }).map((_, i) => ({
 
 export default function FloatingIconsBackground() {
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div className="absolute inset-0 min-h-screen pointer-events-none overflow-hidden">
       {randomFloatBooks.map((b, i) => (
         <BookIcon
           key={i}
