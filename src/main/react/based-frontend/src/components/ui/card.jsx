@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { X } from "lucide-react";
 
 function Card({
   className,
@@ -90,6 +91,36 @@ function CardFooter({
   );
 }
 
+function CartCard({
+  className,
+  onDelete,
+  children,
+  ...props
+}) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "relative bg-card/60 backdrop-blur-md text-card-foreground flex flex-col gap-6 rounded-xl border py-6 px-4 shadow-sm",
+        className
+      )}
+      {...props}
+    >
+      {onDelete && (
+        <button
+          onClick={onDelete}
+          className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      )}
+      {children}
+    </div>
+  );
+}
+
+
+
 export {
   Card,
   CardHeader,
@@ -98,4 +129,5 @@ export {
   CardAction,
   CardDescription,
   CardContent,
+  CartCard,
 }
