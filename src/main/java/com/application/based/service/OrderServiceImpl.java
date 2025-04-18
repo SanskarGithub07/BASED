@@ -13,6 +13,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -38,7 +40,8 @@ public class OrderServiceImpl implements OrderService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    SessionCreateParams.LineItem.PriceData createPriceData(CheckoutItemDto checkoutItemDto){
+    private SessionCreateParams.LineItem.PriceData createPriceData(CheckoutItemDto checkoutItemDto) {
+        log.trace("Creating price data for book: {}", checkoutItemDto.getBookName());
         return SessionCreateParams.LineItem.PriceData.builder()
                 .setCurrency("usd")
                 .setUnitAmount((long)(checkoutItemDto.getPrice()*100))
@@ -49,14 +52,18 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
-    SessionCreateParams.LineItem createSessionLineItem(CheckoutItemDto checkoutItemDto){
+    private SessionCreateParams.LineItem createSessionLineItem(CheckoutItemDto checkoutItemDto) {
+        log.trace("Creating session line item for {} (Qty: {})",
+                  checkoutItemDto.getBookName(), checkoutItemDto.getQuantity());
         return SessionCreateParams.LineItem.builder()
                 .setPriceData(createPriceData(checkoutItemDto))
                 .setQuantity(Long.parseLong(String.valueOf(checkoutItemDto.getQuantity())))
                 .build();
     }
+
     @Override
     public Session createSession(List<CheckoutItemDto> checkoutItemDtoList) throws StripeException {
+        log.info("Creating Stripe checkout session for {} items", checkoutItemDtoList.size());
         String successUrl = baseUrl + "payment/success";
         String failedUrl = baseUrl + "payment/failed";
 
@@ -75,19 +82,24 @@ public class OrderServiceImpl implements OrderService {
                 .setSuccessUrl(successUrl)
                 .build();
 
-        return Session.create(params);
+        Session session = Session.create(params);
+        log.debug("Stripe session created - ID: {}", session.getId());
+        return session;
     }
 
     @Override
     @Transactional
     public void placeOrder(User user, String sessionId) {
+        log.info("Placing order for user: {} (Session: {})", user.getUsername(), sessionId);
+
         if (orderRepository.existsBySessionId(sessionId)) {
-            // Order already exists; don't create again
+            log.warn("Duplicate order attempt - Session ID already exists: {}", sessionId);
             return;
         }
 
         CartDto cartDto = cartService.listCartItems(user);
         List<CartItemDto> cartItemDtoList = cartDto.getCartItems();
+        log.debug("Processing {} cart items for order", cartItemDtoList.size());
 
         Order order = Order.builder()
                 .createdDate(new Date())
@@ -96,7 +108,9 @@ public class OrderServiceImpl implements OrderService {
                 .user(user)
                 .build();
 
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        log.info("Order created - ID: {}, Total: ${}",
+                 savedOrder.getId(), savedOrder.getTotalPrice());
 
         for (CartItemDto cartItemDto : cartItemDtoList) {
             OrderItem orderItem = OrderItem.builder()
@@ -108,13 +122,19 @@ public class OrderServiceImpl implements OrderService {
                     .build();
 
             orderItemsRepository.save(orderItem);
+            log.trace("Order item added - Book: {}, Qty: {}",
+                      cartItemDto.getBook().getBookName(), cartItemDto.getQuantity());
         }
 
         cartService.deleteUserCartItems(user);
+        log.debug("Cleared cart after order placement");
     }
 
     @Override
     public List<Order> listOrders(User user) {
-        return orderRepository.findAllByUserOrderByCreatedDateDesc(user);
+        log.debug("Fetching order history for user: {}", user.getUsername());
+        List<Order> orders = orderRepository.findAllByUserOrderByCreatedDateDesc(user);
+        log.trace("Found {} orders for user {}", orders.size(), user.getUsername());
+        return orders;
     }
 }
