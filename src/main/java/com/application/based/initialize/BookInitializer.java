@@ -40,7 +40,7 @@ public class BookInitializer implements CommandLineRunner {
             String[] line;
             boolean isFirstLine = true;
             int count = 0;
-            int maxBooks = 100;
+            int maxBooks = 500;
 
             while ((line = csvReader.readNext()) != null && count < maxBooks) {
                 if (isFirstLine) {

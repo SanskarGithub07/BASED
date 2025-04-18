@@ -10,4 +10,7 @@ public interface BookRequestRepository extends JpaRepository<BookRequest, Long> 
     boolean existsByIsbn(String isbn);
 
     Optional<BookRequest> findByIsbn (@Pattern(regexp = "^[0-9Xx\\-]{1,20}$", message = "Invalid ISBN format") String isbn);
+
+//    @Query("SELECT DISTINCT br FROM BookRequest br JOIN br.requesters r WHERE r.id = :userId ORDER BY br.createdAt DESC")
+//    Page<BookRequest> findByRequesterId(@Param("userId") Long userId, Pageable pageable);
 }

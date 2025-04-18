@@ -49,4 +49,25 @@ public class BookRequestController {
         String result = bookRequestService.updateRequestStatus(requestId, status);
         return ResponseEntity.ok(result);
     }
+
+//    @GetMapping("/user")
+//    public ResponseEntity<List<BookRequest>> getUserRequests(
+//            HttpServletRequest request,
+//            @RequestParam(defaultValue = "5") int limit) {
+//
+//        User user = authenticatedUserUtil.getCurrentAuthenticatedUser(request);
+//        List<BookRequest> requests = bookRequestService.getUserRequests(user, limit);
+//        return ResponseEntity.ok(requests);
+//    }
+
+//    @GetMapping("/user")
+//    public ResponseEntity<Page<BookRequest>> getUserRequests(
+//            HttpServletRequest request,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "3") int size) {
+//
+//        User user = authenticatedUserUtil.getCurrentAuthenticatedUser(request);
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+//        return ResponseEntity.ok(bookRequestService.getUserRequests(user, pageable));
+//    }
 }

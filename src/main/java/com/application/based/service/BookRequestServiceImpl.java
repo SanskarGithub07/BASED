@@ -100,4 +100,16 @@ public class BookRequestServiceImpl implements BookRequestService {
         email.setMsgBody(message);
         emailService.sendSimpleMail(email);
     }
+
+//    public List<BookRequest> getUserRequests(User user, int limit) {
+//        Page<BookRequest> page = bookRequestRepository.findByRequesterId(
+//                user.getId(),
+//                PageRequest.of(0, limit, Sort.by("createdAt").descending())
+//        );
+//        return page.getContent();
+//    }
+//        @Override
+//        public Page<BookRequest> getUserRequests (User user, Pageable pageable) {
+//                    return bookRequestRepository.findByRequesterId(user.getId(), pageable);
+//                }
 }
