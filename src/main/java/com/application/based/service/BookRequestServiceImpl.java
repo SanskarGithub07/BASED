@@ -9,6 +9,10 @@ import com.application.based.repository.BookRepository;
 import com.application.based.repository.BookRequestRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -101,15 +105,9 @@ public class BookRequestServiceImpl implements BookRequestService {
         emailService.sendSimpleMail(email);
     }
 
-//    public List<BookRequest> getUserRequests(User user, int limit) {
-//        Page<BookRequest> page = bookRequestRepository.findByRequesterId(
-//                user.getId(),
-//                PageRequest.of(0, limit, Sort.by("createdAt").descending())
-//        );
-//        return page.getContent();
-//    }
-//        @Override
-//        public Page<BookRequest> getUserRequests (User user, Pageable pageable) {
-//                    return bookRequestRepository.findByRequesterId(user.getId(), pageable);
-//                }
+    @Override
+    public Page<BookRequest> getRecentUserRequests(User user, int limit) {
+        Pageable pageable = PageRequest.of(0, limit, Sort.by("createdAt").descending());
+        return bookRequestRepository.findRecentRequestsByUser(user.getId(), pageable);
+    }
 }

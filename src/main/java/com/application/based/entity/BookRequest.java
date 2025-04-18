@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +18,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookRequest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,18 +26,20 @@ public class BookRequest {
     private String authorName;
     private String isbn;
     private Long quantity;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "book_request_requesters",
-            joinColumns = @JoinColumn(name = "book_request_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @Builder.Default
-    private Set<User> requesters = new HashSet<>();
-
     private String additionalNotes;
 
     @Enumerated(EnumType.STRING)
-    private RequestStatus status;
+    private RequestStatus status = RequestStatus.PENDING;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "book_request_requester",
+            joinColumns = @JoinColumn(name = "book_request_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> requesters = new HashSet<>();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdAt;
 }
