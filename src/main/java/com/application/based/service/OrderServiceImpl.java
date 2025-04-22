@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     public Session createSession(List<CheckoutItemDto> checkoutItemDtoList) throws StripeException {
-        String successUrl = baseUrl + "payment/success";
+        String successUrl = baseUrl + "payment/success?session_id={CHECKOUT_SESSION_ID}";
         String failedUrl = baseUrl + "payment/failed";
 
         Stripe.apiKey = apiKey;

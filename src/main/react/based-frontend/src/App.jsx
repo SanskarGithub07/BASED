@@ -19,6 +19,8 @@ import BookRequestForm from "./components/BookRequestForm";
 import Header from "./components/xp-ui/Header";
 import { initTheme } from "./lib/utils.js";
 import OrdersPage from "./pages/OrdersPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import PaymentFailedPage from "./pages/PaymentFailedPage";
 
 export default function App() {
   const token = localStorage.getItem("authToken");
@@ -63,6 +65,14 @@ export default function App() {
             <Route
               path="/dashboard"
               element={token ? <CustomerDashboard /> : <Navigate to="/login" />}
+            />
+            <Route 
+              path="/payment/success"
+              element={token? <PaymentSuccessPage /> : <Navigate to="/login" />}
+            />
+            <Route 
+              path="/payment/failed" 
+              element={token ? <PaymentFailedPage /> : <Navigate to="/login" />}
             />
           </Routes>
         </motion.div>
