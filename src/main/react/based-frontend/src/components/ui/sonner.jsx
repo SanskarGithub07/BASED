@@ -1,5 +1,5 @@
-import { useTheme } from "next-themes"
-import { Toaster as Sonner } from "sonner";
+import { useTheme } from "next-themes";
+import { Toaster as Sonner} from "sonner";
 
 const Toaster = ({
   ...props
@@ -8,6 +8,8 @@ const Toaster = ({
 
   return (
     <Sonner
+      position="bottom-center"
+      richColors
       theme={theme}
       className="toaster group"
       style={
@@ -21,4 +23,4 @@ const Toaster = ({
   );
 }
 
-export { Toaster }
+export { Toaster}
