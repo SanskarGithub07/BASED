@@ -13,6 +13,7 @@ import BookManagementNew from "./pages/BookManagementNew";
 import AuthPage from "./pages/AuthPage";
 import Cart from "./Cart";
 import BookRequestPage from "./pages/BookRequestPage";
+import { Toaster } from "@/components/ui/sonner"; 
 
 import Header from "./components/xp-ui/Header";
 import { initTheme } from "./lib/utils.js";
@@ -31,6 +32,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <Header />
+      <Toaster position="bottom-center" richColors />
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}

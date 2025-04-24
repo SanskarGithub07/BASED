@@ -14,7 +14,7 @@ export default function BookRequestPage() {
   return (
     <>
       <FloatingIconsBackground />
-      <Toaster position="bottom-center" richColors />
+      {/* <Toaster position="bottom-center" richColors /> */}
       <div className="container mx-auto px-4 py-8">
         <BookRequestForm onFormSubmitSuccess={handleFormSubmitSuccess} />
         <RecentBookRequests refreshKey={refreshKey} />
