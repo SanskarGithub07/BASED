@@ -210,7 +210,7 @@ export default function OrdersPage() {
                     <GlassCard className="h-full flex flex-col">
                       <CardHeader className="pb-2">
                         <div className="flex justify-between items-start">
-                          <CardTitle className="text-lg font-medium">
+                          <CardTitle className="text-lg font-medium font-bold">
                             Order {getOrderIdDisplay(order, index)}
                           </CardTitle>
                           <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200">
@@ -218,7 +218,7 @@ export default function OrdersPage() {
                           </Badge>
                         </div>
                       </CardHeader>
-                      <CardContent className="pt-2 flex-grow flex flex-col">
+                      <CardContent className="pt-2 p-5 flex-grow flex flex-col">
                         <div className="flex flex-row gap-4">
                           {/* Book cover image - non-clickable */}
                           <div className="flex-shrink-0">
