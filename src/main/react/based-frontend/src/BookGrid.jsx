@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Slider } from "@/components/ui/slider";
+import { toast } from "sonner";
 import {
   Select,
   SelectTrigger,
@@ -9,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import GlassCard from "./components/xp-ui/GlassCard";
 import FloatingIconsBackground from "./components/xp-ui/FloatingiconsBackground";
 
@@ -346,7 +347,7 @@ export default function BookGrid() {
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
                               </p>
                             </div>
-                            
+                            <DialogClose asChild>
                             <button
                               className="w-full mt-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg backdrop-blur-md border border-purple-400/30 font-medium tracking-wide hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
                               onClick={async () => {
@@ -362,10 +363,11 @@ export default function BookGrid() {
                                       Authorization: `Bearer ${token}`,
                                     },
                                   });
-                                  alert("Book added to cart!");
+                                  // alert("Book added to cart!");
+                                  toast.success("Item Successfully Added")
                                 } catch (error) {
                                   console.error("Error adding to cart:", error);
-                                  alert("Failed to add book to cart.");
+                                  toast.error("Failed to Add Item to the Cart")
                                 }
                               }}
                             >
@@ -377,6 +379,7 @@ export default function BookGrid() {
                               </svg>
                               ADD TO CART
                             </button>
+                          </DialogClose>
                           </div>
                         </DialogContent>
                       </Dialog>
