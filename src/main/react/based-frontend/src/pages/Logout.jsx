@@ -7,7 +7,7 @@ export default function Logout() {
     useEffect(() => {
         // localStorage.removeItem("authToken");
 
-        navigate("/login");
+        navigate("/");
     }, [navigate]);
 
     return null;

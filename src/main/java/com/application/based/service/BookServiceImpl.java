@@ -26,6 +26,8 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    private final Long QUANTITY_LIMIT = 5L;
+
     @Override
     public Book addBook(BookModel bookModel) {
         log.info("Adding book: {} by {}", bookModel.getBookName(), bookModel.getAuthorName());
@@ -137,5 +139,30 @@ public class BookServiceImpl implements BookService {
             log.warn("Invalid sort JSON: {}", jsonString);
             return null;
         }
+    }
+
+    @Override
+    public List<BookOutDto> findAllLowStockBooks(){
+        List<Book> lowStockBooks = bookRepository.findByQuantityLessThanEqualAndQuantityGreaterThan(QUANTITY_LIMIT, 0L);
+        List<BookOutDto> bookOutDtoList = new ArrayList<>();
+        for(Book book : lowStockBooks){
+            BookOutDto bookOutDto = BookOutDto.builder()
+                    .isbn(book.getIsbn())
+                    .authorName(book.getAuthorName())
+                    .price(book.getPrice())
+                    .bookName(book.getBookName())
+                    .availability(book.getAvailability())
+                    .genre(book.getGenre())
+                    .imageUrl(book.getImageUrl())
+                    .id(book.getId())
+                    .publicationYear(book.getPublicationYear())
+                    .quantity(book.getQuantity())
+                    .publisher(book.getPublisher())
+                    .build();
+
+            bookOutDtoList.add(bookOutDto);
+        }
+
+        return bookOutDtoList;
     }
 }

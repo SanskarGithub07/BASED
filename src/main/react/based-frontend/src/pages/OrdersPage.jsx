@@ -59,6 +59,17 @@ export default function OrdersPage() {
     } finally {
       setLoading(false);
     }
+
+  const handleCheckout = async () => {
+    const res = await fetch("http://localhost:8080/api/order/create-checkout-session", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    });
+    const { sessionId } = await res.json();
+    const stripe = await stripePromise;
+    await stripe.redirectToCheckout({ sessionId });
   };
 
   const handleDownloadReceipt = async (orderId) => {
