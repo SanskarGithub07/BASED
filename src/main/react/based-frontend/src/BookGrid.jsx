@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Slider } from "@/components/ui/slider";
 import {
@@ -17,6 +18,7 @@ const DEFAULT_BOOK_IMAGE = "/placeholder.jpeg";
 const MIN_IMAGE_DIMENSION = 10;
 
 export default function BookGrid() {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     "author-name": "",
     "isbn-number": "",
@@ -34,6 +36,19 @@ export default function BookGrid() {
   const [books, setBooks] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  // Function to handle redirecting to the book request page
+  const handleRequestBook = () => {
+    // Prepare request parameters based on search filters
+    const requestData = {
+      bookName: filters["book-name"] || '',
+      authorName: filters["author-name"] || '',
+      isbn: filters["isbn-number"] || ''
+    };
+    
+    // Navigate to book request page with query parameters
+    navigate('/request/book', { state: requestData });
+  };
 
   const fetchBooks = async () => {
     try {
@@ -263,6 +278,13 @@ export default function BookGrid() {
                 >
                   {loading ? "Loading..." : "Apply Filters"}
                 </button>
+
+                <button
+                  onClick={handleRequestBook}
+                  className="w-full mt-4 bg-gradient-to-r from-blue-600 to-teal-600 text-white py-2 rounded-lg backdrop-blur-md border border-blue-400/30 font-medium tracking-wide hover:from-blue-700 hover:to-teal-700 transition-all duration-200"
+                >
+                  Request a Book
+                </button>
               </div>
             </GlassCard>
           </div>
@@ -388,8 +410,19 @@ export default function BookGrid() {
                   ))}
                 </div>
               ) : (
-                <div className="flex justify-center items-center h-64">
+                <div className="flex flex-col justify-center items-center h-64 space-y-6">
                   <p className="text-lg opacity-70">No books found matching your criteria</p>
+                  <button
+                    onClick={handleRequestBook}
+                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-teal-600 text-white shadow-md backdrop-blur-md border border-blue-400/30 font-medium tracking-wide hover:from-blue-700 hover:to-teal-700 transition-all duration-200 flex items-center gap-2"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 8V16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M8 12H16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Request This Book
+                  </button>
                 </div>
               )}
               

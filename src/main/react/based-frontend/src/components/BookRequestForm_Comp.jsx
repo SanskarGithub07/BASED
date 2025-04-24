@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +21,36 @@ export default function BookFormComponent({ onFormSubmitSuccess }) {
   const [formData, setFormData] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Handle state data (from navigation) if available
+    if (location.state) {
+      const { bookName, authorName, isbn } = location.state;
+      setFormData(prev => ({
+        ...prev,
+        bookName: bookName || prev.bookName,
+        authorName: authorName || prev.authorName,
+        isbn: isbn || prev.isbn,
+      }));
+    }
+    // Also handle query parameters for compatibility
+    else {
+      const searchParams = new URLSearchParams(location.search);
+      const bookNameParam = searchParams.get("bookName");
+      const authorNameParam = searchParams.get("authorName");
+      const isbnParam = searchParams.get("isbn");
+      
+      if (bookNameParam || authorNameParam || isbnParam) {
+        setFormData(prev => ({
+          ...prev,
+          bookName: bookNameParam || prev.bookName,
+          authorName: authorNameParam || prev.authorName,
+          isbn: isbnParam || prev.isbn,
+        }));
+      }
+    }
+  }, [location.state, location.search]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
