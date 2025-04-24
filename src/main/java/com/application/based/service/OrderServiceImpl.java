@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -136,5 +137,10 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderRepository.findAllByUserOrderByCreatedDateDesc(user);
         log.trace("Found {} orders for user {}", orders.size(), user.getUsername());
         return orders;
+    }
+
+    @Override
+    public Optional<Order> findOrderById(Long orderId){
+        return orderRepository.findById(orderId);
     }
 }
