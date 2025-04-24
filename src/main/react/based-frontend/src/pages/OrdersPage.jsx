@@ -377,7 +377,7 @@ export default function OrdersPage() {
                       <p className="text-sm text-muted-foreground">By {item?.book?.authorName || "Unknown Author"}</p>
                       <p className="text-sm text-muted-foreground">ISBN: {item?.book?.isbn || "Unknown"}</p>
                       <div className="flex justify-between items-end mt-2">
-                        <p className="text-sm">{item?.quantity || 0} × ₹{item?.price ? Number(item.price).toFixed(2) : "0.00"}</p>
+                        <p className="text-sm">{item?.quantity || 0} x ₹{item?.price ? Number(item.price).toFixed(2) : "0.00"}</p>
                         <p className="font-medium">₹{((item?.quantity || 0) * (item?.price || 0)).toFixed(2)}</p>
                       </div>
                     </div>
@@ -400,4 +400,4 @@ export default function OrdersPage() {
       </Dialog>
     </div>
   );
-}
+}};
