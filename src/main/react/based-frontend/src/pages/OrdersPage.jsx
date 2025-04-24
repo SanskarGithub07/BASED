@@ -4,8 +4,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { loadStripe } from "@stripe/stripe-js";
 
 const publisherApiKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
-
-// Replace with your Stripe public key
 const stripePromise = loadStripe(publisherApiKey);
 
 export default function OrdersPage() {
@@ -33,6 +31,29 @@ export default function OrdersPage() {
     await stripe.redirectToCheckout({ sessionId });
   };
 
+  const handleDownloadReceipt = async (orderId) => {
+    const res = await fetch(`http://localhost:8080/api/order/export-to-pdf/${orderId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    });
+
+    if (!res.ok) {
+      alert("Failed to download receipt.");
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `order_${orderId}_receipt.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  };
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -55,6 +76,13 @@ export default function OrdersPage() {
                   </li>
                 ))}
               </ul>
+              <Button
+                className="mt-2"
+                variant="secondary"
+                onClick={() => handleDownloadReceipt(order.id)}
+              >
+                Download Receipt
+              </Button>
             </CardContent>
           </Card>
         ))}

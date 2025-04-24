@@ -7,6 +7,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderService {
     Session createSession(List<CheckoutItemDto> checkoutItemDtoList) throws StripeException;
@@ -14,4 +15,6 @@ public interface OrderService {
     void placeOrder(User user, String sessionId);
 
     List<Order> listOrders(User user);
+
+    Optional<Order> findOrderById(Long orderId);
 }
