@@ -13,4 +13,5 @@ public interface BookService {
     List<Book> searchBooks(String authorName, String isbn, String bookName);
     Page<BookOutDto> findBooksWithFilteringPaginationAndSorting(BookInDto build);
     Book getBookByIsbn(String isbn);
+    List<BookOutDto> findAllLowStockBooks();
 }

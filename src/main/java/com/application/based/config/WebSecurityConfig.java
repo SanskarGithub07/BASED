@@ -43,7 +43,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/welcome", "/api/auth/register", "/api/auth/login", "/api/auth" +
                                 "/verifyRegistration", "/api/auth/resendVerifyToken", "/api/invitation-codes/**").permitAll()
                         .requestMatchers("/api/auth/customer/**", "/api/cart/**", "/api/book/**", "/api/order/**", "/api/request/**").hasAuthority("ROLE_CUSTOMER")
-                        .requestMatchers("/api/auth/staff/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/auth/employee/**").hasAuthority("ROLE_EMPLOYEE")
                         .anyRequest().authenticated()
                 )

@@ -3,6 +3,8 @@ import { Menu, X, Sun, Moon, ShoppingCart } from "lucide-react"; // Import Shopp
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
+
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,11 +23,20 @@ export default function Header() {
     }
   }, [isDarkMode]);
 
+  
+
+  // const navLinks = [
+  //   { name: "Home", path: "/dashboard" },
+  //   { name: "Books", path: "/booksnew" },
+  //   // { name: "Dashboard", path: "/dashboard" },
+  // ];
+
+  const location = useLocation();
   const navLinks = [
-    { name: "Home", path: "/" },
+    { name: "Home", path: location.pathname === "/login" ? "/" : "/dashboard" },
     { name: "Books", path: "/booksnew" },
-    { name: "Dashboard", path: "/dashboard" },
   ];
+  
 
   return (
     <header className="sticky top-0 z-50 border-b bg-white/50 dark:bg-black/90 backdrop-blur">
