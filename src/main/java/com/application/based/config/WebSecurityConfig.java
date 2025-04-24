@@ -40,9 +40,10 @@ public class WebSecurityConfig {
                 .cors(cors -> cors.configure(http))
 //                .cors(cors ->  cors.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/welcome", "/api/auth/register", "/api/auth/login", "/api/auth/verifyRegistration", "/api/auth/resendVerifyToken").permitAll()
+                        .requestMatchers("/api/auth/welcome", "/api/auth/register", "/api/auth/login", "/api/auth" +
+                                "/verifyRegistration", "/api/auth/resendVerifyToken", "/api/invitation-codes/**").permitAll()
                         .requestMatchers("/api/auth/customer/**", "/api/cart/**", "/api/book/**", "/api/order/**", "/api/request/**").hasAuthority("ROLE_CUSTOMER")
-                        .requestMatchers("/api/auth/staff/**").hasAuthority("ROLE_STAFF")
+                        .requestMatchers("/api/auth/staff/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/auth/employee/**").hasAuthority("ROLE_EMPLOYEE")
                         .anyRequest().authenticated()
                 )

@@ -1,0 +1,29 @@
+TODO
+1. Search by format (paperback, hardcover, digital)
+2. If search empty add link to request book
+3. Generate a receipt in pdf format
+4. Refine Update inventory upon purchase functionality
+5. Update inventory with new supplies (employee)
+Owners page
+6. View sales statistics and trends 
+7. Print daily reports for low stock books
+8 Generate on demand sales reports
+9. Calculate inventory based on sales trends (regression)
+10. Maintain book prices and details
+
+Errors and Improvements
+1. Make it so that the user cannot access the customer dashboard without logging in.
+2. Fix the main page links including the navbar to allow the user to navigate to the book filter page.
+3. Allow the customer to search for books without logging in as right now the user has to login as customer to search for a book using the filters but add to cart should remain as a functionality which requires the user to log in.
+4. Add update cart functionality in the frontend cart page
+5. Update add to cart onclick alert.
+6. Add exception handling to backend code.
+7. Forgot password link does not work use backend endpoint to change password.
+8. UI fixes.
+9. Add more logging in the other layers.
+
+
+Testing
+1. Add tests for controller and service layer and fix minor bugs for repository tests.
+2. Selenium testing
+
