@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  Card,
+  CartCard,
   CardContent,
   CardHeader,
   CardTitle,
@@ -31,6 +31,30 @@ export default function Cart() {
     }
   };
 
+  const deleteCartItem = async (cartItemId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      await axios.delete(`http://localhost:8080/api/cart/delete/${cartItemId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Update local state
+      const updatedItems = cartItems.filter((item) => item.id !== cartItemId);
+      setCartItems(updatedItems);
+
+      const newTotal = updatedItems.reduce(
+        (sum, item) => sum + item.book.price * item.quantity,
+        0
+      );
+      setTotalCost(newTotal);
+    } catch (err) {
+      console.error("Error deleting item:", err);
+    }
+  };
+
   useEffect(() => {
     fetchCart();
   }, []);
@@ -46,7 +70,10 @@ export default function Cart() {
       ) : (
         <>
           {cartItems.map((item, index) => (
-            <Card key={index}>
+            <CartCard
+              key={item.id}
+              onDelete={() => deleteCartItem(item.id)}
+            >
               <CardHeader>
                 <CardTitle>{item.book.bookName}</CardTitle>
               </CardHeader>
@@ -56,7 +83,8 @@ export default function Cart() {
                 <p>Quantity: {item.quantity}</p>
                 <p>Price: ₹{item.book.price.toFixed(2)}</p>
               </CardContent>
-            </Card>
+            </CartCard>
+
           ))}
 
           <div className="text-right pt-4">
