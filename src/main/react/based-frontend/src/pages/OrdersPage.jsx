@@ -59,6 +59,7 @@ export default function OrdersPage() {
     } finally {
       setLoading(false);
     }
+  };
 
     const handleCheckout = async () => {
       const res = await fetch("http://localhost:8080/api/order/create-checkout-session", {
