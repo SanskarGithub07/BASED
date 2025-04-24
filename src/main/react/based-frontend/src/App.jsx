@@ -57,7 +57,7 @@ export default function App() {
               path="/books/search"
               element={token ? <BookGrid /> : <Navigate to="/login" />}
             />
-            <Route path="/booksnew" element={<BookManagementNew />} />
+            {/* <Route path="/booksnew" element={<BookManagementNew />} /> */}
             <Route
               path="/cart"
               element={token ? <Cart /> : <Navigate to="/login" />}

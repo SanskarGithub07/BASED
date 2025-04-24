@@ -23,18 +23,10 @@ export default function Header() {
     }
   }, [isDarkMode]);
 
-  
-
-  // const navLinks = [
-  //   { name: "Home", path: "/dashboard" },
-  //   { name: "Books", path: "/booksnew" },
-  //   // { name: "Dashboard", path: "/dashboard" },
-  // ];
-
   const location = useLocation();
   const navLinks = [
     { name: "Home", path: location.pathname === "/login" ? "/" : "/dashboard" },
-    { name: "Books", path: "/booksnew" },
+    { name: "Books", path: location.pathname === "/login" ? "/" : "/books/search"},
   ];
   
 
