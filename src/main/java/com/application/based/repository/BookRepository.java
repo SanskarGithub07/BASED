@@ -20,4 +20,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     List<Book> findByBookNameContainingIgnoreCase(String bookName);
 
     List<Book> findAll(Specification<Book> specification);
+
+    List<Book> findByQuantityLessThanEqualAndQuantityGreaterThan(Long quantityLimit, Long lowerLimit);
 }
