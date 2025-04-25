@@ -44,7 +44,8 @@ public class WebSecurityConfig {
                                 "/verifyRegistration", "/api/auth/resendVerifyToken", "/api/invitation-codes/**").permitAll()
                         .requestMatchers("/api/auth/customer/**", "/api/cart/**", "/api/book/**", "/api/order/**", "/api/request/**").hasAuthority("ROLE_CUSTOMER")
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/auth/employee/**").hasAuthority("ROLE_EMPLOYEE")
+                        .requestMatchers("/api/auth/employee/**", "/api/request/**").hasAuthority("ROLE_EMPLOYEE")
+//                        need to remove the api/request and see if system works as intended
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

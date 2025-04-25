@@ -47,7 +47,6 @@ export default function RegistrationForm() {
   const [message, setMessage] = useState(""); // General success message
   const [error, setError] = useState(""); // General error message (e.g., backend error)
 
-  // Field-specific errors for better feedback
   const [passwordError, setPasswordError] = useState("");
   const [invitationCodeError, setInvitationCodeError] = useState("");
 
@@ -55,7 +54,6 @@ export default function RegistrationForm() {
   const [isValidatingCode, setIsValidatingCode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Password visibility state
   const [showPassword, setShowPassword] = useState(false);
   const [showMatchingPassword, setShowMatchingPassword] = useState(false);
 
@@ -150,14 +148,42 @@ export default function RegistrationForm() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  // const handleRoleChange = (value) => {
+  //    // Ensure the selected role is one of the available roles
+  //    if (availableRoles.some(role => role.value === value)) {
+  //        setUser({ ...user, roles: [value] });
+  //    } else {
+  //        // Fallback to customer if somehow an invalid role is selected
+  //        setUser({ ...user, roles: ["ROLE_CUSTOMER"] });
+  //    }
+  // };
+
   const handleRoleChange = (value) => {
-     // Ensure the selected role is one of the available roles
-     if (availableRoles.some(role => role.value === value)) {
-         setUser({ ...user, roles: [value] });
-     } else {
-         // Fallback to customer if somehow an invalid role is selected
-         setUser({ ...user, roles: ["ROLE_CUSTOMER"] });
-     }
+    // Ensure the selected role is one of the available roles before setting
+    // This check is mostly for robustness, the UI prevents selecting unavailable roles
+    const isValidSelection = availableRoles.some(role => role.value === value);
+
+    if (!isValidSelection) {
+        console.warn("Attempted to select an invalid role:", value);
+        // Fallback to customer if selection is somehow invalid
+        setUser(prev => ({ ...prev, roles: ["ROLE_CUSTOMER"] }));
+        return;
+    }
+
+    let newRoles;
+    if (value === "ROLE_CUSTOMER") {
+      // If 'Customer' is selected, the roles array is just ["ROLE_CUSTOMER"]
+      newRoles = ["ROLE_CUSTOMER"];
+    } else {
+      // If a different role (like "ROLE_EMPLOYEE", "ROLE_ADMIN") is selected,
+      // the roles array should include both "ROLE_CUSTOMER" and the selected role
+      newRoles = ["ROLE_CUSTOMER", value];
+    }
+
+    // Update the user state with the new roles array
+    setUser(prev => ({ ...prev, roles: newRoles }));
+
+    console.log("Role changed to:", value, " - User roles state set to:", newRoles); // Optional debug log
   };
 
   const handleSubmit = async (e) => {
