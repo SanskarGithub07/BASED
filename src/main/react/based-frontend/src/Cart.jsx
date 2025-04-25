@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Toaster } from "@/components/ui/sonner"; 
+import { Toaster } from "@/components/ui/sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
 import {
   Card as CartCard,
@@ -67,28 +67,63 @@ export default function Cart() {
     }
   };
 
+  const handleQuantityChange = async (cartItemId, newQuantity) => {
+    const parsedQuantity = parseInt(newQuantity, 10);
+    if (isNaN(parsedQuantity) || parsedQuantity < 1) return;
+  
+    try {
+      const token = localStorage.getItem("authToken");
+  
+      await axios.put(
+        `http://localhost:8080/api/cart/update/${cartItemId}`,
+        parsedQuantity,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      // Update local state
+      const updatedItems = cartItems.map((item) =>
+        item.id === cartItemId ? { ...item, quantity: parsedQuantity } : item
+      );
+      setCartItems(updatedItems);
+  
+      const newTotal = updatedItems.reduce(
+        (sum, item) => sum + item.book.price * item.quantity,
+        0
+      );
+      setTotalCost(newTotal);
+    } catch (err) {
+      console.error("Error updating quantity:", err);
+    }
+  };
+  
+
   const handleCheckout = async () => {
     try {
       setCheckoutLoading(true);
       const token = localStorage.getItem("authToken");
-      
+
       const response = await fetch("http://localhost:8080/api/order/create-checkout-session", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to create checkout session");
       }
-      
+
       const { sessionId } = await response.json();
-      
+
       // Use Stripe to redirect to checkout
       const stripe = await stripePromise;
       const result = await stripe.redirectToCheckout({ sessionId });
-      
+
       if (result.error) {
         console.error("Stripe redirect error:", result.error);
         throw new Error(result.error.message);
@@ -110,7 +145,7 @@ export default function Cart() {
       <div className="absolute inset-0 z-0">
         <FloatingIconsBackground />
       </div>
-      
+
       <div className="relative z-10 container mx-auto px-4">
         <GlassCard className="p-6">
           <h1 className="text-2xl font-bold mb-6">Your Shopping Cart</h1>
@@ -141,9 +176,9 @@ export default function Cart() {
                     <CardHeader>
                       <div className="flex justify-between">
                         <CardTitle>{item.book.bookName}</CardTitle>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => deleteCartItem(item.id)}
                           className="text-red-500 hover:text-red-700 hover:bg-red-100/20"
                         >
@@ -154,9 +189,19 @@ export default function Cart() {
                     <CardContent className="grid grid-cols-2 gap-2">
                       <p><span className="font-medium">Author:</span> {item.book.authorName}</p>
                       <p><span className="font-medium">ISBN:</span> {item.book.isbn}</p>
-                      <p><span className="font-medium">Quantity:</span> {item.quantity}</p>
+                      <div className="flex items-center gap-2">
+                        <label className="font-medium">Quantity:</label>
+                        <input
+                          type="number"
+                          min="1"
+                          value={item.quantity}
+                          onChange={(e) => handleQuantityChange(item.id, e.target.value)}
+                          className="w-16 px-2 py-1 border rounded-md bg-white dark:bg-gray-800 text-center"
+                        />
+                      </div>
                       <p><span className="font-medium">Price:</span> ₹{item.book.price.toFixed(2)}</p>
                     </CardContent>
+
                   </CartCard>
                 ))}
               </div>
@@ -165,9 +210,9 @@ export default function Cart() {
                 <p className="text-lg font-semibold mb-4">
                   Total: ₹{totalCost.toFixed(2)}
                 </p>
-                
-                <Button 
-                  onClick={handleCheckout} 
+
+                <Button
+                  onClick={handleCheckout}
                   disabled={checkoutLoading || cartItems.length === 0}
                   className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-2 rounded-lg text-lg font-medium"
                 >

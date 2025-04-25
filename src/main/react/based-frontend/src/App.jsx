@@ -20,6 +20,7 @@ import { initTheme } from "./lib/utils.js";
 import OrdersPage from "./pages/OrdersPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import PaymentFailedPage from "./pages/PaymentFailedPage";
+import OwnerDashboard from "./pages/OwnerDashboard";
 
 export default function App() {
   const token = localStorage.getItem("authToken");
@@ -74,6 +75,7 @@ export default function App() {
               path="/payment/failed" 
               element={token ? <PaymentFailedPage /> : <Navigate to="/login" />}
             />
+            <Route path = "/admin/dashboard" element={<OwnerDashboard />} />
           </Routes>
         </motion.div>
       </AnimatePresence>
